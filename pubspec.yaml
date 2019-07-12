@@ -1,0 +1,106 @@
+name: Shrine
+description: Take your design up a notch and learn to use our advanced component backdrop menu.
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.2
+  intl: ^0.15.7
+  scoped_model: ^0.3.0
+  shrine_images: ^1.0.0
+  mailer: ^2.5.0
+
+
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.7.2+1
+
+flutter_icons: 
+  image_path_android: 'assets/icon.png'
+  image_path_ios: 'assets/icon.png'
+  ios: true
+  android: true
+  
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/diamond.png
+    - assets/slanted_menu.png
+    - assets/menu_background.jpg
+    - assets/0-0.png
+    - assets/1-0.png
+    - assets/2-0.png
+    - assets/3-0.png
+    - assets/4-0.png
+    - assets/5-0.png
+    - assets/6-0.png
+    - assets/7-0.png
+    - assets/8-0.png
+    - assets/9-0.png
+    - assets/10-0.png
+    - assets/11-0.png
+    - assets/12-0.png
+    - assets/13-0.png
+    - assets/14-0.png
+    - assets/15-0.png
+    - assets/16-0.png
+    - assets/17-0.png
+    - assets/18-0.png
+    - assets/19-0.png
+    - assets/20-0.png
+    - assets/21-0.png
+    - assets/22-0.png
+    - assets/23-0.png
+    - assets/24-0.png
+    - assets/25-0.png
+    - assets/26-0.png
+    - assets/27-0.png
+    - assets/28-0.png
+    - assets/29-0.png
+    - assets/30-0.png
+    - assets/31-0.png
+    - assets/32-0.png
+    - assets/33-0.png
+    - assets/34-0.png
+    - assets/35-0.png
+    - assets/36-0.png
+    - assets/37-0.png
+    - assets/38-0.png
+    - assets/39-0.png
+    - assets/40-0.png
+    - assets/41-0.png
+    - assets/42-0.png
+    - assets/43-0.png
+    - assets/44-0.png
+    - assets/45-0.png
+    - assets/46-0.png
+    - assets/47-0.png
+    - assets/48-0.png
+    - assets/49-0.png
+    - assets/50-0.png
+    - assets/51-0.png
+    - assets/52-0.png
+    - assets/53-0.png
+    - assets/54-0.png
+    - assets/55-0.png
+    - assets/56-0.png
+    - assets/57-0.png
+    - assets/58-0.png
+    - assets/59-0.png
+    - assets/60-0.png
+    - assets/61-0.png
+    - assets/62-0.png
+
+
+  fonts:
+    - family: Rubik
+      fonts:
+        - asset: fonts/Rubik-Regular.ttf
+        - asset: fonts/Rubik-Medium.ttf
+          weight: 500
+
