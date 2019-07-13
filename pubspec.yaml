@@ -9,7 +9,7 @@ dependencies:
   intl: ^0.15.7
   scoped_model: ^0.3.0
   shrine_images: ^1.0.0
-  mailer: ^2.5.0
+  mailer: ^3.0.1
 
 
   

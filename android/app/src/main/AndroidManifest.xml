@@ -8,8 +8,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="ris_i_testo"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Рис и тесто"
+        android:icon="@mipmap/icon_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -30,4 +30,6 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

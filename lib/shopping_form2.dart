@@ -108,7 +108,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                 ).closed.then((SnackBarClosedReason reason) {
                                   _opennewpage();
                                 });          */    
-                                mailIt(model, name, phone);   
+                                mailIt(model, name, phone, address);   
                                 print('Заказ подтвержден');
                                 _ackAlert(context, model);  
 
@@ -195,10 +195,9 @@ class MyCustomFormState extends State<MyCustomForm> {
   }*/
 
 
-  mailIt(AppStateModel model, name, phone) async {
+  mailIt(AppStateModel model, name, phone, address) async {
   String username = 'naken505@gmail.com';
   String password = 'Worlddelete0Rin';
-
   final smtpServer = gmail(username, password);
   // Use the SmtpServer class to configure an SMTP server:
   // final smtpServer = new SmtpServer('smtp.domain.com');
@@ -216,12 +215,21 @@ class MyCustomFormState extends State<MyCustomForm> {
   // Use [catchExceptions]: true to prevent [send] from throwing.
   // Note that the default for [catchExceptions] will change from true to false
   // in the future!
-  final sendReports = await send(message, smtpServer, catchExceptions: false);
+  final sendReports = await send(message, smtpServer, timeout: Duration(seconds: 10) /*catchExceptions: false*/);
   
+  var connection = PersistentConnection(smtpServer);
+  
+  // Send the first message
+  await connection.send(message);
+  
+  // send the equivalent message
+  
+  // close the connection
+  await connection.close();
   }
 }
                         
-bool isNumeric(String s) {
+bool isNumeric(String s)  {
   try
   {
     return double.parse(s) != null;

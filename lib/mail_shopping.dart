@@ -26,7 +26,7 @@ mailIt(AppStateModel model) async {
   // Use [catchExceptions]: true to prevent [send] from throwing.
   // Note that the default for [catchExceptions] will change from true to false
   // in the future!
-  final sendReports = await send(message, smtpServer, catchExceptions: false);
+  final sendReports = await send(message, smtpServer, /*catchExceptions: false*/);
   
   }
 
