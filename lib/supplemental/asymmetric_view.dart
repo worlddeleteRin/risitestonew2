@@ -49,9 +49,10 @@ class AsymmetricView extends StatelessWidget {
         height: height,
         width: width,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 0),
+          padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 10),
            child: column,
         ),
+       // alignment: Alignment(0.0, 0.0),
       );
     }).toList();
   }
