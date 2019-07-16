@@ -47,7 +47,7 @@ class _FrontLayer extends StatelessWidget {
             onTap: onTap,
             child: Container(
               height: 40.0,
-              alignment: AlignmentDirectional.centerStart,
+              alignment: AlignmentDirectional.center,
             ),
           ),
           Expanded(

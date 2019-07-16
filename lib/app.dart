@@ -21,14 +21,22 @@ import 'home.dart';
 import 'login.dart';
 import 'expanding_bottom_sheet.dart';
 import 'supplemental/cut_corners_border.dart';
+import 'model/app_state_model.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'model/product.dart';
+import 'expanding_bottom_sheet.dart';
+
 
 class ShrineApp extends StatefulWidget {
+ 
   @override
   _ShrineAppState createState() => _ShrineAppState();
 }
 
 class _ShrineAppState extends State<ShrineApp>
     with SingleTickerProviderStateMixin {
+
+  AppStateModel model;
   // Controller to coordinate both the opening/closing of backdrop and sliding
   // of expanding bottom sheet.
   AnimationController _controller;
@@ -43,11 +51,46 @@ class _ShrineAppState extends State<ShrineApp>
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Рис & Тесто',
+      home: DefaultTabController(
+        length: 5,
+        child: Scaffold(
+          bottomNavigationBar: ExpandingBottomSheet(hideController: _controller), 
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            bottom: TabBar(
+              tabs: [
+                
+                Tab(icon: Icon(Icons.pie_chart_outlined)),
+                Tab(icon: Icon(Icons.local_pizza)),
+                Tab(icon: Icon(Icons.camera_roll)),
+                Tab(icon: Icon(Icons.local_drink)),
+                Tab(icon: Icon(Icons.opacity)),
+                
+              ],
+            ),
+            title: Text('Рис & Тесто'),
+          ),
+          body: TabBarView(
+            physics: AlwaysScrollableScrollPhysics(),
+            children: [
+              ProductPage(Category.all),
+              ProductPage(Category.pizza),
+              ProductPage(Category.rolls),
+              ProductPage(Category.drinks),
+              ProductPage(Category.supplements),
+            ],
+          ),
+        ),
+      ),
+      
+
+      /*
       home: HomePage(
         backdrop: Backdrop(
           frontLayer: ProductPage(),
@@ -59,6 +102,7 @@ class _ShrineAppState extends State<ShrineApp>
         ),
         expandingBottomSheet: ExpandingBottomSheet(hideController: _controller),
       ),
+      */
       initialRoute: '/',
       onGenerateRoute: _getRoute,
       //theme: _kShrineTheme,
