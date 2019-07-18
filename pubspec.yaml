@@ -32,6 +32,8 @@ flutter:
     - assets/diamond.png
     - assets/slanted_menu.png
     - assets/menu_background.jpg
+    - assets/pizza.png
+    - assets/logo_white.png
     - assets/0-0.png
     - assets/1-0.png
     - assets/2-0.png
@@ -95,6 +97,7 @@ flutter:
     - assets/60-0.png
     - assets/61-0.png
     - assets/62-0.png
+
 
 
   fonts:

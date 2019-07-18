@@ -25,6 +25,8 @@ import 'model/app_state_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'model/product.dart';
 import 'expanding_bottom_sheet.dart';
+import 'shopping_form2.dart';
+import 'stock.dart';
 
 
 class ShrineApp extends StatefulWidget {
@@ -62,30 +64,59 @@ class _ShrineAppState extends State<ShrineApp>
         child: Scaffold(
           bottomNavigationBar: ExpandingBottomSheet(hideController: _controller), 
           appBar: AppBar(
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.black87,
             bottom: TabBar(
+              isScrollable: true,
               tabs: [
+                Text("Пицца",
+                style: TextStyle(
+                  fontSize: 20,
+                )
+                ),
+                Text("Роллы",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                ),
+                Text("Сеты",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                ),
+                Text("Напитки",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                ),
+                Text("Добавки",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                ),
                 
-                Tab(icon: Icon(Icons.pie_chart_outlined)),
-                Tab(icon: Icon(Icons.local_pizza)),
+               // Tab(icon: Icon(Icons.local_pizza)),
+                /*Tab(icon: Icon(Icons.local_pizza)),
                 Tab(icon: Icon(Icons.camera_roll)),
                 Tab(icon: Icon(Icons.local_drink)),
-                Tab(icon: Icon(Icons.opacity)),
+                Tab(icon: Icon(Icons.opacity)),*/
                 
               ],
             ),
             title: Text('Рис & Тесто'),
+            centerTitle: true,
           ),
           body: TabBarView(
             physics: AlwaysScrollableScrollPhysics(),
             children: [
-              ProductPage(Category.all),
+              //roductPage(Category.all),
               ProductPage(Category.pizza),
               ProductPage(Category.rolls),
+              ProductPage(Category.sets),
               ProductPage(Category.drinks),
               ProductPage(Category.supplements),
             ],
           ),
+          drawer: MainDrawer(),
         ),
       ),
       
@@ -110,6 +141,59 @@ class _ShrineAppState extends State<ShrineApp>
   }
 }
 
+Widget MainDrawer() {
+    return Builder(builder: (context) =>
+  Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/logo_white.png')
+                )
+              ),
+            ),
+            ListTile(
+              title: Text(
+                'Каталог Товаров',
+                ),
+                leading: Icon(Icons.local_dining, color: Colors.black),
+                trailing: Icon(Icons.keyboard_arrow_right, color: Colors.red),
+              onTap: () {
+                //Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ShrineApp()));
+                //Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Акции',
+                ),
+                leading: Icon(Icons.local_offer, color: Colors.black),
+                trailing: Icon(Icons.keyboard_arrow_right, color: Colors.red),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => StockPage()));
+                //Navigator.pop(context);
+                
+              },
+            ),
+          ],
+        ),
+  ),
+      );
+}
 
 
 Route<dynamic> _getRoute(RouteSettings settings) {
