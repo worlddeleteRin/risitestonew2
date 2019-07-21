@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -83,10 +84,14 @@ class ProductCard extends StatelessWidget {
             child: child,
           ),
       child: */
-      return Row(
-            //verticalDirection: VerticalDirection.down,
+      return Card(
+            elevation: 20,
+            semanticContainer: true,
+            child: Row(
+            mainAxisSize: MainAxisSize.max,
+            verticalDirection: VerticalDirection.down,
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Column(
               children: <Widget>[  
@@ -213,7 +218,7 @@ class ProductCard extends StatelessWidget {
             
       ),
     ],
-            
+            ),  
       );
   }
 
