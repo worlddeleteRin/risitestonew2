@@ -36,7 +36,9 @@ class ProductCard extends StatelessWidget {
   Widget _shoppingButton(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(
       builder: (context, child, model) => MaterialButton(
-        color: Colors.green,
+        shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+        color: Colors.orange,
         onPressed: () {
           model.addProductToCart(product.id);
           /*Flushbar(
@@ -54,7 +56,7 @@ class ProductCard extends StatelessWidget {
           )..show(context);*/
         },
         child: Text(
-          "В корзину",
+          "Хочу!",
           style: TextStyle(
             color: Colors.white,
           )
@@ -69,6 +71,45 @@ class ProductCard extends StatelessWidget {
         decimalDigits: 0, locale: "ru_RU", symbol: "руб." );
     final ThemeData theme = Theme.of(context);
 
+
+
+    final priceWidget = Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40),
+              child: new Container(
+          width: 60.0,
+          height:60.0,
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.green,
+          ),
+          child: new Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget> [
+          Text(
+                      product == null ? '' : '${product.price}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 19,
+                        fontFamily: "arial",
+                        color: Colors.white,
+                      )
+          ),
+          Text(
+            product == null ? '' : 'руб.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 10,
+                        fontFamily: "arial",
+                        color: Colors.white,
+                      )
+          ),
+          ],
+          ),
+          ),
+          ),
+            );
     final imageWidget = Image.asset(
       product.assetName,
       //package: product.assetPackage,
@@ -93,11 +134,12 @@ class ProductCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Column(
+                Stack(
               children: <Widget>[  
               Padding(
               padding: EdgeInsets.symmetric(vertical: 11)
               ),
+
               Center(
               child:SizedBox(
                 width: 100,
@@ -110,15 +152,21 @@ class ProductCard extends StatelessWidget {
               */
           ),
               ),
+              Positioned(
+              child: priceWidget,
+            top: -30,
+            right: 0,
+          ),
+              
             ],),
             Column(children: <Widget>[
 
           
               SizedBox(
                 height:  .28 * MediaQuery.of(context).size.height,
-                width: .50 * MediaQuery.of(context).size.width,
+                width: .70 * MediaQuery.of(context).size.width,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
@@ -145,7 +193,7 @@ class ProductCard extends StatelessWidget {
 
                       
                     ),
-                    SizedBox(height: 4.0),
+                    SizedBox(height: 5.0),
                     /*Text(
                       product == null ? '' : formatter.format(product.price),
                       style: TextStyle(
@@ -171,7 +219,7 @@ class ProductCard extends StatelessWidget {
                     ),*/
                 
               ],),
-            
+          /*  
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -216,7 +264,7 @@ class ProductCard extends StatelessWidget {
             
             ],
             
-      ),
+          ),*/
     ],
             ),  
       );
