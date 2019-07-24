@@ -48,6 +48,9 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 },
                 removequantity: () {
                   model.removeItemFromCart(id);
+                },
+                removeitems: () {
+                  model.removeItemsFromCart(id);
                 }
               ),
         )
@@ -95,6 +98,39 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                     ],
                   ),
                   Positioned(
+                    bottom: 20.0,
+                    left: 16.0,
+                    right: 16.0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        MaterialButton(
+                          onPressed: () {
+                            Navigator.push(context, 
+                        MaterialPageRoute(builder: (context) => MyCustomForm()),
+                        );
+                        //model.clearCart();
+                        //ExpandingBottomSheet.of(context).close();
+                          },
+                          height: 50,
+                          minWidth: 200,
+                          elevation: 10,
+                          color: Colors.green,
+                          shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(15.0)),
+                          child: Text('Оформить заказ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          )
+                          )
+                        ),
+                      ],
+                    )
+                  )
+                  /*
+                  Positioned(
                     bottom: 60.0,
                     left: 16.0,
                     right: 16.0,
@@ -118,6 +154,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                       },
                     ),
                   ),
+                  
                   Positioned(
                     bottom: 16.0,
                     left: 16.0,
@@ -138,6 +175,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                       },
                     ),
                   ),
+                  */
                 ],
               );
             },
@@ -170,6 +208,25 @@ class ShoppingCartSummary extends StatelessWidget {
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    MaterialButton(
+                      onPressed: () {
+                        model.clearCart();
+                        ExpandingBottomSheet.of(context).close();
+                      },
+                      color: Colors.red,
+                      shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+                      child: Text('Очистить карту',
+                      style: TextStyle(
+                        color: Colors.white,
+                      )
+                      )
+                    ),
+                  ],
+                ),
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Expanded(
@@ -177,7 +234,10 @@ class ShoppingCartSummary extends StatelessWidget {
                     ),
                     Text(
                       '${model.subtotalCost} руб.',
-                      style: largeAmountStyle,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 30,
+                      ),
                     ),
                   ],
                 ),/*
@@ -232,16 +292,19 @@ class ShoppingCartSummary extends StatelessWidget {
 
 class ShoppingCartRow extends StatelessWidget {
   ShoppingCartRow(
-      {@required this.product, @required this.quantity, this.onPressed, this.addquantity, this.removequantity});
+      {@required this.product, @required this.quantity, this.onPressed, this.addquantity, this.removequantity, this.removeitems});
 
   final Product product;
   int quantity;
   final VoidCallback onPressed;
   final VoidCallback addquantity;
   final VoidCallback removequantity;
+  final VoidCallback removeitems;
 
   @override
   Widget build(BuildContext context) {
+
+    AppStateModel model;
     final formatter = NumberFormat.simpleCurrency(
         decimalDigits: 0, locale: Localizations.localeOf(context).toString());
     final localTheme = Theme.of(context);
@@ -250,6 +313,7 @@ class ShoppingCartRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
         key: ValueKey(product.id),
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
@@ -258,7 +322,9 @@ class ShoppingCartRow extends StatelessWidget {
               color: Colors.red,
               iconSize: 35,
               icon: const Icon(Icons.remove_shopping_cart),
-              onPressed: onPressed,
+              onPressed: () {
+                removeitems();
+              }
             ),
           ),
           Expanded(
@@ -292,9 +358,10 @@ class ShoppingCartRow extends StatelessWidget {
                                   child: FlatButton(
                                     onPressed: () {
                                       removequantity();
-                                      print('$quantity');
                                     },
-                                    child: Icon(Icons.arrow_left),
+                                    child: Icon(Icons.keyboard_arrow_left,
+                                    color: Colors.red,
+                                    ),
                                   ),
                                   //child: Text('Количество: $quantity'),
                                   
@@ -308,7 +375,9 @@ class ShoppingCartRow extends StatelessWidget {
                                       addquantity();
                                       print('$quantity');
                                     },
-                                    child: Icon(Icons.arrow_right),
+                                    child: Icon(Icons.keyboard_arrow_right,
+                                    color: Colors.green,
+                                    ),
                                   ),
                                 ),
                                 Text('x ${product.price} руб.'),

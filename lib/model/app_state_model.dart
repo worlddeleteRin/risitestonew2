@@ -96,6 +96,12 @@ class AppStateModel extends Model {
     notifyListeners();
   }
 
+  void removeItemsFromCart(int productId) {
+    if (_productsInCart.containsKey(productId)) {
+        _productsInCart.remove(productId);
+    }
+    notifyListeners();
+  }
   // Returns the Product instance matching the provided id.
   Product getProductById(int id) {
     return _availableProducts.firstWhere((p) => p.id == id);
