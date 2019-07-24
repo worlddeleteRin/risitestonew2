@@ -66,13 +66,21 @@ class _ShrineAppState extends State<ShrineApp>
           appBar: AppBar(
             backgroundColor: Colors.black87,
             bottom: TabBar(
+              indicatorColor: Colors.green,
+              indicatorWeight: 5,
               isScrollable: true,
+              unselectedLabelColor: Colors.grey,
+              labelColor: Colors.orange,
+              labelPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               tabs: [
-                Text("Пицца",
+               
+                Text(
+                  "Пицца",
                 style: TextStyle(
                   fontSize: 20,
                 )
                 ),
+                
                 Text("Роллы",
                 style: TextStyle(
                   fontSize: 20,
@@ -183,9 +191,10 @@ Widget MainDrawer() {
                 // Update the state of the app
                 // ...
                 // Then close the drawer
+                Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => StockPage()));
-                //Navigator.pop(context);
+                
                 
               },
             ),
