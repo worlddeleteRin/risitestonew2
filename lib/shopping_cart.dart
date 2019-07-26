@@ -22,7 +22,9 @@ import 'expanding_bottom_sheet.dart';
 import 'model/app_state_model.dart';
 import 'model/product.dart';
 import 'shopping_form2.dart';
+import 'shopping_form3.dart';
 import 'mail_shopping.dart';
+import 'package:stepper_touch/stepper_touch.dart';
 
 const _leftColumnWidth = 60.0;
 
@@ -51,7 +53,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 },
                 removeitems: () {
                   model.removeItemsFromCart(id);
-                }
+                },
               ),
         )
         .toList();
@@ -98,7 +100,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                     ],
                   ),
                   Positioned(
-                    bottom: 20.0,
+                    bottom: 15.0,
                     left: 16.0,
                     right: 16.0,
                     child: Row(
@@ -107,7 +109,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                         MaterialButton(
                           onPressed: () {
                             Navigator.push(context, 
-                        MaterialPageRoute(builder: (context) => MyCustomForm()),
+                        MaterialPageRoute(builder: (context) => MyShopping()),
                         );
                         //model.clearCart();
                         //ExpandingBottomSheet.of(context).close();
@@ -292,7 +294,7 @@ class ShoppingCartSummary extends StatelessWidget {
 
 class ShoppingCartRow extends StatelessWidget {
   ShoppingCartRow(
-      {@required this.product, @required this.quantity, this.onPressed, this.addquantity, this.removequantity, this.removeitems});
+      {@required this.product, @required this.quantity, this.onPressed, this.addquantity, this.removequantity, this.removeitems,});
 
   final Product product;
   int quantity;
@@ -360,14 +362,20 @@ class ShoppingCartRow extends StatelessWidget {
                                       removequantity();
                                     },
                                     child: Icon(Icons.keyboard_arrow_left,
+                                    size: 40,
                                     color: Colors.red,
                                     ),
                                   ),
                                   //child: Text('Количество: $quantity'),
                                   
                                 ),
+                                
                                 Container(
-                                  child: Text('$quantity'),
+                                  child: Text('$quantity',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                  )
+                                  ),
                                 ),
                                 Expanded(
                                   child: FlatButton(
@@ -376,6 +384,7 @@ class ShoppingCartRow extends StatelessWidget {
                                       print('$quantity');
                                     },
                                     child: Icon(Icons.keyboard_arrow_right,
+                                    size: 40,
                                     color: Colors.green,
                                     ),
                                   ),
@@ -406,3 +415,5 @@ class ShoppingCartRow extends StatelessWidget {
     );
   }
 }
+
+

@@ -191,6 +191,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.3"
+  stepper_touch:
+    dependency: "direct main"
+    description:
+      name: stepper_touch
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   stream_channel:
     dependency: transitive
     description:
@@ -233,6 +240,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
+  wave_progress_widget:
+    dependency: "direct main"
+    description:
+      name: wave_progress_widget
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   xml:
     dependency: transitive
     description:
@@ -249,3 +263,4 @@ packages:
     version: "2.1.16"
 sdks:
   dart: ">=2.4.0 <3.0.0"
+  flutter: ">=0.1.4 <2.0.0"

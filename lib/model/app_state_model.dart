@@ -96,6 +96,19 @@ class AppStateModel extends Model {
     notifyListeners();
   }
 
+  void setItemQuantity(int productId, value) {
+    if (_productsInCart.containsKey(productId)) {
+      if (_productsInCart[productId] == 1) {
+        _productsInCart.remove(productId);
+      } else {
+        _productsInCart[productId] = value;
+      }
+    }
+
+    notifyListeners();
+  }
+
+
   void removeItemsFromCart(int productId) {
     if (_productsInCart.containsKey(productId)) {
         _productsInCart.remove(productId);

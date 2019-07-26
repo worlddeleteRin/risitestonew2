@@ -16,22 +16,25 @@ class StockPage extends StatelessWidget {
 }
 
 Widget stockPage(BuildContext context) {
-  return ListView(
+  return Container(
+    color: Color(0xFF333359),
+  child: ListView(
     //verticalDirection: VerticalDirection.down,
     children: <Widget>[
-      bodyWidget(context, Icons.cake, Colors.red, "День рождения? Скидка 20%!",
+      bodyWidget(context, Icons.cake, Colors.red, "День рождение? Скидка 20%!",
       "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
       bodyWidget(context, Icons.drive_eta, Colors.green, "Самовывоз - 15%!",
       "Заберите свой заказ сами и получите скидку в размере 15%!",),
       bodyWidget(context, Icons.local_dining, Colors.yellow, "Скидка на роллы 20%!",
       "Самая жаркая акция этого лета! Получи скидку на все роллы в размере 20%! Акция длится до 8 августа.",),
-      bodyWidget(context, Icons.cake, Colors.orange, "День рождения? Скидка 20%!",
+      bodyWidget(context, Icons.cake, Colors.orange, "День рождение? Скидка 20%!",
       "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
-      bodyWidget(context, Icons.cake, Colors.lightGreen, "День рождения? Скидка 20%!",
+      bodyWidget(context, Icons.cake, Colors.lightGreen, "День рождение? Скидка 20%!",
       "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
-      bodyWidget(context, Icons.cake, Colors.pink, "День рождения? Скидка 20%!",
+      bodyWidget(context, Icons.cake, Colors.pink, "День рождение? Скидка 20%!",
       "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
     ],
+  ),
   );
 }
 

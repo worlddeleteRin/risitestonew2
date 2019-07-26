@@ -303,7 +303,9 @@ class _ExpandingBottomSheetState extends State<ExpandingBottomSheet>
           Row(children: <Widget>[
             AnimatedPadding(
               padding: _cartPaddingFor(numProducts),
-              child: Icon(Icons.shopping_cart),
+              child: Icon(Icons.shopping_cart,
+              color: Colors.black,
+              ),
               duration: Duration(milliseconds: 225),
             ),
             Container(
@@ -351,6 +353,8 @@ class _ExpandingBottomSheetState extends State<ExpandingBottomSheet>
         width: _widthAnimation.value,
         height: _heightAnimation.value,
         child: Material(
+          color: Colors.white,
+          //color: Color(0xFF333350),
           animationDuration: Duration(milliseconds: 0),
           shape: BeveledRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -358,7 +362,6 @@ class _ExpandingBottomSheetState extends State<ExpandingBottomSheet>
             ),
           ),
           elevation: 4.0,
-          color: kShrinePink50,
           child: _cartIsVisible
               ? _buildShoppingCartPage()
               : _buildThumbnails(numProducts),

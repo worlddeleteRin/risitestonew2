@@ -36,6 +36,9 @@ class ProductCard extends StatelessWidget {
   Widget _shoppingButton(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(
       builder: (context, child, model) => MaterialButton(
+        materialTapTargetSize: MaterialTapTargetSize.padded,
+        elevation: 10,
+        splashColor: Colors.green,
         shape: new RoundedRectangleBorder(
          borderRadius: new BorderRadius.circular(30.0)),
         color: Colors.orange,
