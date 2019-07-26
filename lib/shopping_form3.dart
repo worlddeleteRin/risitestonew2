@@ -220,6 +220,7 @@ bool isSwitched4 = false;
 
 Widget FirstForm() {
   return Form(
+      autovalidate: true,
       key: _formKey,
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,6 +230,9 @@ Widget FirstForm() {
                 padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),             
                         child: Column(children: <Widget>[
                                 TextFormField(
+                                  enableInteractiveSelection: true,
+                                  cursorColor: Colors.green,
+                                  autofocus: true,
                       decoration: InputDecoration(
                         hintText: "Имя",
                         labelText: "Ваше Имя"
@@ -331,14 +335,28 @@ mailIt(AppStateModel model, name, phone, address, waytopick, waytopay) async {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Ваш заказ подтвержден'),
+        backgroundColor: Colors.black87,
+        shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+        title: Text('Ваш заказ подтвержден!',
+        style: TextStyle(
+          color: Colors.white,
+        )
+        ),
         content: ProgressWidget(),
         actions: <Widget>[
-          FlatButton(
+          MaterialButton(
+            height: 50,
+            minWidth: 120,
+            color: Colors.orange,
+            shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
             child: Text(
-              'OК',
+              'Продолжить',
               style: TextStyle(
-                color: Colors.black,
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
               ),
               ),
             onPressed: () {
@@ -365,6 +383,19 @@ class ProgressWidget extends StatefulWidget {
 
 class _ProgressWidgetState extends State<ProgressWidget> {
   var _progress = 50.0;
+  var _color_rate = Colors.white;
+
+  setColorRate(value) {
+    if(value <= 40) {
+      _color_rate = Colors.red;
+    }
+    else if (value > 40 && value <= 70) {
+      _color_rate = Colors.yellow;
+    }
+    else if (value > 70 ) {
+      _color_rate = Colors.lightGreen;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -375,24 +406,27 @@ class _ProgressWidgetState extends State<ProgressWidget> {
             Text('Оцените качество наших услуг!',
             textAlign: TextAlign.center,
             style: TextStyle(
-              
+              color: Colors.white,
             )
             ),
             Container(padding: EdgeInsets.only(bottom:19)),
-            WaveProgress(180.0, Colors.blue, Colors.blueAccent, _progress),
+            WaveProgress(180.0, Colors.white, _color_rate, _progress),
             Container(
               margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Slider(
+                activeColor: Colors.orange,
+                inactiveColor: Colors.white,
                   max: 100.0,
                   min: 0.0,
                   value: _progress,
                   onChanged: (value) {
                     setState(() => _progress = value);
+                    setColorRate(value);
                   }),
             ),
             Text(
               '${_progress.round()}',
-              style: TextStyle(color: Colors.blueAccent, fontSize: 40.0),
+              style: TextStyle(color: _color_rate, fontSize: 40.0),
             )
           ],
         ),
