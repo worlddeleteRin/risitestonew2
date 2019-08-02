@@ -20,17 +20,18 @@ import 'package:scoped_model/scoped_model.dart';
 import '../model/app_state_model.dart';
 import '../model/product.dart';
 
+
+
+
+
 class ProductCard extends StatelessWidget {
-  ProductCard({this.imageAspectRatio = 40 / 42, this.product})
+  ProductCard({this.imageAspectRatio = 50 / 50, this.product})
       : assert(imageAspectRatio == null || imageAspectRatio > 0);
 
   final double imageAspectRatio;
   final Product product;
 
-  static final kTextBoxHeight = 150.0;
-
-
-
+  //static final kTextBoxHeight = 150.0;
 
   @override 
   Widget _shoppingButton(BuildContext context) {
@@ -87,11 +88,70 @@ class ProductCard extends StatelessWidget {
           ),
           child: new Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget> [
           Text(
-                      product == null ? '' : '${product.price}',
+                      product == null ? '' : product.stockprice == null ? '${product.price}' : '${product.stockprice}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 19,
+                        fontFamily: "arial",
+                        color: Colors.white,
+                      )
+          ),
+          Text(
+            product == null ? '' : 'руб.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 10,
+                        fontFamily: "arial",
+                        color: Colors.white,
+                      )
+          ),
+          ],
+          ),
+          ),
+          ),
+            );
+      final stockpriceWidget = Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40),
+              child: new Container(
+          width: 70.0,
+          height:70.0,
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.redAccent,
+          ),
+          child: new Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget> [
+          Text(
+                      product == null ? '' : '${product.price} руб.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 11,
+                        fontFamily: "arial",
+                        color: Colors.black,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: Colors.black,
+                      ),
+          ),
+          /*Text(
+            product == null ? '' : 'руб.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 8,
+                        fontFamily: "arial",
+                        color: Colors.black,
+                      )
+          ),*/
+          Text(
+                      product == null ? '' : product.stockprice == null ? '${product.price}' : '${product.stockprice}',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 19,
@@ -129,24 +189,30 @@ class ProductCard extends StatelessWidget {
           ),
       child: */
       return Card(
+            borderOnForeground: true,
             elevation: 20,
             semanticContainer: true,
-            child: Row(
-            mainAxisSize: MainAxisSize.max,
+            shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row( 
+            //mainAxisSize: MainAxisSize.min,
             verticalDirection: VerticalDirection.down,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
                 Stack(
               children: <Widget>[  
-              Padding(
-              padding: EdgeInsets.symmetric(vertical: 11)
-              ),
-
+              //Padding(
+              //padding: EdgeInsets.symmetric(vertical: 11)
+              //),
+          
               Center(
               child:SizedBox(
-                width: 100,
-                height: 100,
+                width: 130,
+                height: 130,
               child: imageWidget,
               /*child: AspectRatio(
                 aspectRatio: imageAspectRatio,
@@ -155,20 +221,21 @@ class ProductCard extends StatelessWidget {
               */
           ),
               ),
+
               Positioned(
-              child: priceWidget,
-            top: -30,
+              child: product.stockprice == null ? priceWidget : stockpriceWidget, 
+            top: -35,
             right: 0,
           ),
               
             ],),
-            Column(children: <Widget>[
-
+            Column(mainAxisSize: MainAxisSize.min,children: <Widget>[
           
               SizedBox(
-                height:  .28 * MediaQuery.of(context).size.height,
-                width: .70 * MediaQuery.of(context).size.width,
+                //height:  .28 * MediaQuery.of(context).size.height,
+                width: .62 * MediaQuery.of(context).size.width,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -270,6 +337,8 @@ class ProductCard extends StatelessWidget {
           ),*/
     ],
             ),  
+              ],
+            ),
       );
   }
 

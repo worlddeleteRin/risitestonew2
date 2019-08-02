@@ -31,12 +31,14 @@ class Product {
     @required this.isFeatured,
     @required this.name,
     @required this.price,
+    @required this.stockprice,
   })  : assert(category != null),
         assert(id != null),
         assert(isFeatured != null),
         assert(name != null),
         assert(price != null),
         assert(description != null);
+        //assert(stockprice != null);
 
   final Category category;
   final int id;
@@ -44,6 +46,7 @@ class Product {
   final String name;
   final int price;
   final String description;
+  final int stockprice;
 
   String get assetName => 'assets/$id-0.png';
   //String get assetPackage => 'shrine_images';

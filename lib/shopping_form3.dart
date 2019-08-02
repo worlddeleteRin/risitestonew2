@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'model/app_state_model.dart';
 import 'dart:io';
 import 'package:mailer/mailer.dart';
@@ -6,6 +8,9 @@ import 'package:mailer/smtp_server.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:Shrine/app.dart';
 import 'package:wave_progress_widget/wave_progress_widget.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:groovin_material_icons/groovin_material_icons.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class MyShopping extends StatefulWidget {
   @override
@@ -13,6 +18,30 @@ class MyShopping extends StatefulWidget {
 }
 
 class MyShoppingState extends State<MyShopping> {
+  
+  int _radioValue;
+  String _payResult;
+  String _deliveryResult;
+
+  void _handleRadioValueChange(int value) {
+    setState(() {
+      _radioValue = value;
+  
+      switch (_radioValue) {
+        case 0:
+          _deliveryResult = 'Доставка курьером';
+          break;
+        case 1:
+          _deliveryResult = 'Самовывоз';
+          break;
+        case 2:
+          _payResult = 'Оплата наличными';
+          break;
+        case 3:
+          _payResult = 'Оплата картой курьеру';
+      }
+    });
+  }
 
   checkWayPick() {
     if(isSwitched == true) {
@@ -46,8 +75,11 @@ bool isSwitched4 = false;
   // init the step to 0th position
   int current_step = 0;
 
+  bool _internet_result = false;
+
   var _progress = 50.0;
 
+ var phonecontroller = new MaskedTextController(mask: '+7(000)-000-00-00');
 
 
   @override
@@ -82,6 +114,38 @@ bool isSwitched4 = false;
         title: Text("Способ доставки"),
         content: Column(children: <Widget>[
         Row(children: <Widget>[
+          new Radio(
+            value: 0,
+            groupValue: _radioValue,
+            onChanged: _handleRadioValueChange,
+          ),
+          new Text(
+          'Доставка курьером',
+          style: new TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        ],
+        ),
+        Row(children: <Widget>[
+        new Radio(
+            value: 1,
+            groupValue: _radioValue,
+            onChanged: _handleRadioValueChange,
+          ),
+          new Text(
+          'Самовывоз',
+          style: new TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        ],
+        ),
+        
+          /*
+        Row(children: <Widget>[
+
+        
         Text('Доставка курьером',
         style: TextStyle(
 
@@ -113,7 +177,9 @@ bool isSwitched4 = false;
   activeColor: Colors.green,
 ),
 ],)
-],),
+        ], */
+        ],
+),
         // You can change the style of the step icon i.e number, editing, etc.
         state: StepState.editing,
         isActive: true),
@@ -121,37 +187,33 @@ bool isSwitched4 = false;
         title: Text("Способ оплаты"),
         content: Column(children: <Widget>[
         Row(children: <Widget>[
-        Text('Оплата наличными',
-        style: TextStyle(
-
-        )
-        ), 
-        Checkbox(
-  value: isSwitched3,
-  onChanged: (value) {
-    setState(() {
-      isSwitched3 = value;
-    });
-  },
-  activeColor: Colors.green,
-),
-],),
-  Row(children: <Widget>[
-        Text('Оплата картой курьеру',
-        style: TextStyle(
-
-        )
-        ), 
-        Checkbox(
-  value: isSwitched4,
-  onChanged: (value) {
-    setState(() {
-      isSwitched4 = value;
-    });
-  },
-  activeColor: Colors.green,
-),
-],)
+          new Radio(
+            value: 2,
+            groupValue: _radioValue,
+            onChanged: _handleRadioValueChange,
+          ),
+          new Text(
+          'Опалата наличными',
+          style: new TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        ],
+        ),
+        Row(children: <Widget>[
+        new Radio(
+            value: 3,
+            groupValue: _radioValue,
+            onChanged: _handleRadioValueChange,
+          ),
+          new Text(
+          'Оплата картой курьеру',
+          style: new TextStyle(
+            fontSize: 16.0,
+          ),
+        ),
+        ],
+        ),
 ],),
         // You can change the style of the step icon i.e number, editing, etc.
         state: StepState.editing,
@@ -163,6 +225,7 @@ bool isSwitched4 = false;
         type: StepperType.vertical,
         // Know the step that is tapped
         onStepTapped: (step) {
+          checkConnectivity();
           // On hitting step itself, change the state and jump to that step
           setState(() {
             // update the variable handling the current step value
@@ -188,19 +251,26 @@ bool isSwitched4 = false;
         },
         // On hitting continue button, change the state
         onStepContinue: () {
+          checkConnectivity();
           setState(() {
             // update the variable handling the current step value
             // going back one step i.e adding 1, until its the length of the step
             if (current_step!= null) {
+              checkConnectivity();
               current_step = current_step + 1;
-            if(current_step == 3) {
+            if(current_step == 3) {              
               if (_formKey.currentState.validate()) {
+                checkConnectivity();
+                if (this._internet_result == true) {
                 waytopick = checkWayPick();
                 waytopay = checkWayPay();
-                mailIt(model, name, phone, address, waytopick, waytopay);
-                print("отправлено");
-                _ackAlert(context, model); 
-              }
+                mailIt(model, name, phone, address, _deliveryResult, _payResult);
+                _ackAlert(context, model);
+                }
+                 else {
+                   _noInternetConnection(context);
+                 } 
+              } 
               current_step = 0;
             }
             } else {
@@ -219,23 +289,26 @@ bool isSwitched4 = false;
   }
 
 Widget FirstForm() {
+
   return Form(
-      autovalidate: true,
+      autovalidate: false,
       key: _formKey,
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+          verticalDirection: VerticalDirection.down,
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          //mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[  
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0),             
+            Container(             
                         child: Column(children: <Widget>[
                                 TextFormField(
-                                  enableInteractiveSelection: true,
+                                  //expands: true,
+                                  //enableInteractiveSelection: true,
                                   cursorColor: Colors.green,
                                   autofocus: true,
                       decoration: InputDecoration(
                         hintText: "Имя",
-                        labelText: "Ваше Имя"
+                        labelText: "Ваше Имя",
+                        icon: Icon(GroovinMaterialIcons.account, color: Colors.orange),
                       ),                       
                       validator: (value) {
                         if(value.isEmpty) {
@@ -247,17 +320,16 @@ Widget FirstForm() {
                       },
                     ),
                   TextFormField(
+                    controller: this.phonecontroller,
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
+                        icon: Icon(Icons.phone, color: Colors.green),
                         hintText: "+7 (xxx)-xxx-xx-xx",
-                       labelText: "Номер телефона"
+                       labelText: "Номер телефона",
                       ),
                       validator: (value) {
                         if(value.isEmpty) {
                           return 'Введите номер телефона';
-                        }
-                        else if(!isNumeric(value))
-                        {
-                          return 'Пожалуйста введите корректный номер телефона';
                         }
                         else {
                           phone = value;
@@ -266,6 +338,7 @@ Widget FirstForm() {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
+                        icon: Icon(Icons.location_city, color: Colors.red),
                         hintText: "Адрес",
                         labelText: "Ваш Адрес"
                       ),                       
@@ -275,6 +348,7 @@ Widget FirstForm() {
                         }
                         else {
                           address = value;
+                          checkConnectivity();
                         }
                       },
                     ),
@@ -298,6 +372,59 @@ bool isNumeric(String s)  {
   {
     return false;
   }
+}
+
+checkConnectivity() async {
+  try {
+  final result = await InternetAddress.lookup('google.com');
+  if (result[0].rawAddress.isNotEmpty) {
+    setState(() => this._internet_result = true);
+  }
+} on SocketException catch (_) {
+  return false;
+}
+}
+
+  _noInternetConnection(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.red,
+        shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+        title: Text('Нет соединения с интернетом!',
+        style: TextStyle(
+          color: Colors.white,
+        )
+        ),
+        content: Icon(
+          Icons.signal_wifi_off,
+          size: 80,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            height: 50,
+            minWidth: 120,
+            color: Colors.orange,
+            shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
+            child: Text(
+              'ОК',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 mailIt(AppStateModel model, name, phone, address, waytopick, waytopay) async {

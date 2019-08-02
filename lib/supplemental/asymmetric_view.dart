@@ -22,7 +22,7 @@ class AsymmetricView extends StatelessWidget {
 
   const AsymmetricView({Key key, this.products});
 
-  List<Container> _buildColumns(BuildContext context) {
+  List<ConstrainedBox> _buildColumns(BuildContext context) {
     /*if (products == null || products.isEmpty) {
       return const <Container>[];
     }
@@ -37,7 +37,7 @@ class AsymmetricView extends StatelessWidget {
     /// to the index of the list of columns.
     return List.generate(_listItemCount(products.length), (int index) {
       double width = .40 * MediaQuery.of(context).size.width;
-      double height = 0.28 * MediaQuery.of(context).size.height;
+      double height = 0.30 * MediaQuery.of(context).size.height;
       Widget column;
     
         /// Odd cases
@@ -45,9 +45,11 @@ class AsymmetricView extends StatelessWidget {
           product: products[index],
         );
       
-      return Container(
-        height: height,
-        width: width,
+      return ConstrainedBox(
+        constraints: new BoxConstraints(
+        minWidth: width,
+        maxWidth: 500,
+        ),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 0),
            child: column,
@@ -69,11 +71,14 @@ class AsymmetricView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+
+  return ListView(
+      shrinkWrap: true,
       scrollDirection: Axis.vertical,
       padding: EdgeInsets.fromLTRB(0.0, 3.0, 1.0, 4.0),
       children: _buildColumns(context),
       physics: AlwaysScrollableScrollPhysics(),
     );
   }
+  
 }

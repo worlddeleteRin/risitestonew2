@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "107497677594",
+    "firebase_url": "https://ris-i-testo.firebaseio.com",
+    "project_id": "ris-i-testo",
+    "storage_bucket": "ris-i-testo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:107497677594:android:5ffa5846af9b6283",
+        "android_client_info": {
+          "package_name": "risitesto.example.ris_i_testo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "107497677594-8sn9irbngjfs6m5n6aqnemgns9pt4hju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBepNnAc_9_kihoqKQkrfmw8WtQC0Q0O_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "107497677594-8sn9irbngjfs6m5n6aqnemgns9pt4hju.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

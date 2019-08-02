@@ -57,6 +57,7 @@ class _ShrineAppState extends State<ShrineApp>
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       title: 'Рис & Тесто',
       home: DefaultTabController(

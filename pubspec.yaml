@@ -12,6 +12,11 @@ dependencies:
   mailer: ^3.0.1
   stepper_touch: ^0.0.1
   wave_progress_widget: ^0.0.1
+  connectivity: ^0.4.3+6
+  groovin_material_icons: ^1.1.6
+  flutter_masked_text: ^0.8.0
+  intro_views_flutter: ^2.6.0
+  shared_preferences: ^0.5.3+4
 
 
   
@@ -36,6 +41,7 @@ flutter:
     - assets/menu_background.jpg
     - assets/pizza.png
     - assets/logo_white.png
+    - assets/logo_white2.png
     - assets/0-0.png
     - assets/1-0.png
     - assets/2-0.png
@@ -108,4 +114,19 @@ flutter:
         - asset: fonts/Rubik-Regular.ttf
         - asset: fonts/Rubik-Medium.ttf
           weight: 500
+    - family: MyFont
+      fonts:
+        - asset: assets/Fonts/sspu.ttf    
+    - family: GogoiaDec
+      fonts:
+        - asset: assets/Fonts/gogoia-dec.otf 
+    - family: Greece
+      fonts:
+        - asset: assets/Fonts/greece.ttf 
+    - family: Karmina
+      fonts:
+        - asset: assets/Fonts/Karmina.ttf 
+    - family: SenseiMedium
+      fonts:
+        - asset: assets/Fonts/sensei-medium.ttf  
 

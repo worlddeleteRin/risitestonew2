@@ -45,7 +45,7 @@ class AppStateModel extends Model {
 
   // Totaled prices of the items in the cart.
   double get subtotalCost => _productsInCart.keys
-      .map((id) => _availableProducts[id].price * _productsInCart[id])
+      .map((id) => _availableProducts[id].stockprice == null ? _availableProducts[id].price * _productsInCart[id] : _availableProducts[id].stockprice * _productsInCart[id])
       .fold(0.0, (sum, e) => sum + e);
 
   // Total shipping cost for the items in the cart.
