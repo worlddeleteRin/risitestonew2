@@ -60,7 +60,7 @@ class ProductCard extends StatelessWidget {
           )..show(context);*/
         },
         child: Text(
-          "Хочу!",
+          "Заказать!",
           style: TextStyle(
             color: Colors.white,
           )
@@ -116,7 +116,7 @@ class ProductCard extends StatelessWidget {
           ),
             );
       final stockpriceWidget = Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40),
+            padding: const EdgeInsets.symmetric(vertical: 35),
               child: new Container(
           width: 70.0,
           height:70.0,

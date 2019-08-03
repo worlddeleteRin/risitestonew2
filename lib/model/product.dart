@@ -21,6 +21,7 @@ enum Category {
   sets,
   drinks,
   supplements,
+  burgers,
 }
 
 class Product {

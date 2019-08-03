@@ -61,14 +61,14 @@ class _ShrineAppState extends State<ShrineApp>
       debugShowCheckedModeBanner: false,
       title: 'Рис & Тесто',
       home: DefaultTabController(
-        length: 5,
+        length: 6,
         child: Scaffold(
           bottomNavigationBar: ExpandingBottomSheet(hideController: _controller), 
           appBar: AppBar(
             backgroundColor: Colors.black87,
             bottom: TabBar(
               indicatorColor: Colors.green,
-              indicatorWeight: 5,
+              indicatorWeight: 6,
               isScrollable: true,
               unselectedLabelColor: Colors.grey,
               labelColor: Colors.orange,
@@ -88,6 +88,11 @@ class _ShrineAppState extends State<ShrineApp>
                 ),
                 ),
                 Text("Сеты",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                ),
+                Text("Бургеры",
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -121,6 +126,7 @@ class _ShrineAppState extends State<ShrineApp>
               ProductPage(Category.pizza),
               ProductPage(Category.rolls),
               ProductPage(Category.sets),
+              ProductPage(Category.burgers),
               ProductPage(Category.drinks),
               ProductPage(Category.supplements),
             ],

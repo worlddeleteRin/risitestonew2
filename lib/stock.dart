@@ -27,12 +27,6 @@ Widget stockPage(BuildContext context) {
       "Заберите свой заказ сами и получите скидку в размере 15%!",),
       bodyWidget(context, Icons.local_dining, Colors.yellow, "Скидка на роллы 20%!",
       "Самая жаркая акция этого лета! Получи скидку на все роллы в размере 20%! Акция длится до 8 августа.",),
-      bodyWidget(context, Icons.cake, Colors.orange, "День рождение? Скидка 20%!",
-      "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
-      bodyWidget(context, Icons.cake, Colors.lightGreen, "День рождение? Скидка 20%!",
-      "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
-      bodyWidget(context, Icons.cake, Colors.pink, "День рождение? Скидка 20%!",
-      "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
     ],
   ),
   );
@@ -41,8 +35,10 @@ Widget stockPage(BuildContext context) {
 Widget bodyWidget(BuildContext context,
 sIcon, sColor, sheader, sdesc
 ) {
+  double width = .40 * MediaQuery.of(context).size.width;
   return new Container(
-    height: 150.0,
+    width: width,
+    //height: 150.0,
     margin: const EdgeInsets.symmetric(
       vertical: 16.0,
       horizontal: 24.0,
@@ -72,8 +68,9 @@ Widget stockThumbnail(BuildContext context, sIcon, sColor) {
 }
 
 Widget stockCard(BuildContext context) {
+  double width = .40 * MediaQuery.of(context).size.width;
     return Container(
-     height: 400.0,
+     width: width,
      margin: new EdgeInsets.only(left: 40.0),
      decoration: new BoxDecoration(
        color: new Color(0xFF333366),
@@ -94,7 +91,7 @@ Widget stockCard(BuildContext context) {
   Widget stockCardContent(BuildContext context, sheader, sdesc) {
   return Container(
       margin: new EdgeInsets.fromLTRB(100.0, 16.0, 16.0, 16.0),
-      constraints: new BoxConstraints.expand(),
+      //constraints: new BoxConstraints.expand(),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -108,8 +105,7 @@ Widget stockCard(BuildContext context) {
             ),
           ),
           new Container(height: 10.0),
-          Expanded(
-          child: new Text(
+          new Text(
             sdesc,
             softWrap: true,
             maxLines: 40,
@@ -118,7 +114,6 @@ Widget stockCard(BuildContext context) {
               color: Colors.white,
             ),
             ),
-          ),
         ],
       ),
   );
