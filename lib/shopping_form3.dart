@@ -438,8 +438,9 @@ mailIt(AppStateModel model, name, phone, address, waytopick, waytopay) async {
   
   // Create our message.
   final message = new Message()
-    ..from = new Address(username, 'Your name')
+    ..from = new Address(username, 'Ris & Testo App')
     ..recipients.add('worlddelete0@gmail.com')
+    ..recipients.add('ris.testo@mail.ru')
     ..subject = 'Заказ с приложения Рис и Тесто :: 😀 :: ${new DateTime.now()}'
     ..text = 'This is the plain text.\nThis is line 2 of the text part.'
     ..html = "<h1>Товаров заказано: ${model.totalCartQuantity}</h1>\n<p>${model.totalProductsInCartName} : ${model.totalProductsInCartQuantity}</p> <p>$name, $phone, $address</p> <p>$waytopick, $waytopay</p>";

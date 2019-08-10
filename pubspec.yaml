@@ -42,6 +42,7 @@ flutter:
     - assets/pizza.png
     - assets/logo_white.png
     - assets/logo_white2.png
+    - assets/favorite_food.png
     - assets/0-0.png
     - assets/1-0.png
     - assets/2-0.png
@@ -111,6 +112,12 @@ flutter:
     - assets/66-0.png
     - assets/67-0.png
     - assets/68-0.png
+    - assets/69-0.png
+    - assets/70-0.png
+    - assets/71-0.png
+    - assets/72-0.png
+    - assets/73-0.png
+    - assets/74-0.png
 
 
   fonts:

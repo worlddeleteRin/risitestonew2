@@ -99,7 +99,7 @@ void initState() {
 Widget build(BuildContext context) {
     return new Scaffold(
     body: new Center(
-        child: new Text('Loading...'),
+        child: new Text('Загрузка...'),
     ),
     );
 }
@@ -135,16 +135,12 @@ class IntroScreen extends StatelessWidget {
         'Мы усердно работаем для вас, и используем только качественные продукты',
       ),
       title: Text('Любимая еда'),
-      mainImage: Icon(
-        Icons.local_dining,
-        size: 200,
-        color: Colors.green,
-        ),/*Image.asset(
-        'assets/logo_white.png',
+      mainImage: Image.asset(
+        'assets/favorite_food.png',
         height: 285.0,
         width: 285.0,
         alignment: Alignment.center,
-      ),*/
+      ),
       textStyle: TextStyle(fontFamily: 'SenseiMedium', color: Colors.white),
     ),
     PageViewModel(

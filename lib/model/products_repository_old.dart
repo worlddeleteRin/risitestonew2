@@ -111,7 +111,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл с лососем',
         description: 'Маки ролл с лососем\n (155гр/8шт.)',
-        price: 170,
+        stockprice: 152,
+        price: 190,
       ),
       Product(
         category: Category.rolls,
@@ -119,7 +120,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Спайси Лосось с авокадо',
         description: 'Пикантный маки ролл с лососем, авокадо и соусом Ким чи\n (165гр\8шт)',
-        price: 200,
+        stockprice: 168,
+        price: 210,
 
       ),
       Product(
@@ -128,7 +130,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл с мидиями',
         description: 'Маки ролл с запечными в маринаде мидиями и соусом спаси\n (155гр\ 8шт)',
-        price: 160,
+        stockprice: 148,
+        price: 185,
       ),
       Product(
         category: Category.rolls,
@@ -136,7 +139,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл кани спайси',
         description: 'Маки ролл со снежным крабом и соусом спаси\n (145гр/8шт.)',
-        price: 170,
+        price: 150,
       ),
       Product(
         category: Category.rolls,
@@ -152,7 +155,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Филадельфия с лососем',
         description: 'Ролл со сливочным сыром, огурцом, икрой летучей рыбы и лососем\n (285гр/8шт.)',
-        price: 280,
+        stockprice: 248,
+        price: 310,
       ),
       Product(
         category: Category.rolls,
@@ -160,7 +164,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Филадельфия с угрем',
         description: 'Ролл со сливочным сыром, огурцом, икрой летучей рыбы , копченым угрем, соусом унаги и жареным кунжутом\n (305гр/8шт.)',
-        price: 350,
+        stockprice: 312,
+        price: 390,
       ),
       Product(
         category: Category.rolls,
@@ -168,7 +173,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Филадельфия тобико',
         description: 'Ролл со сливочным сыром,орурцом,лососем м\с и икрой летучей рыбы\n (280гр/8шт.)',
-        price: 300,
+        stockprice: 256,
+        price: 320,
       ),
       Product(
         category: Category.rolls,
@@ -176,7 +182,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Калифорния с Лососем',
         description: 'Ролл с лососем м\c, японским майонезом, огурцом,авокадо и икрой летучей рыбы\n (270гр/8шт.)',
-        price: 300,
+        stockprice: 264,
+        price: 330,
       ),
       Product(
         category: Category.rolls,
@@ -184,7 +191,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Калифорния снежный краб',
         description: 'Ролл со снежным крабом, японским майонезом, огурцом,авокадо и икрой летучей рыбы (270гр/8шт.)',
-        price: 270,
+        stockprice: 232,
+        price: 290,
       ),
       Product(
         category: Category.rolls,
@@ -192,7 +200,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Калифорния с угрем',
         description: 'Ролл с конченым угрем, японским майонезом, огурцом,авокадо и икрой летучей рыбы\n (285гр/8шт.)',
-        price: 330,
+        stockprice: 272,
+        price: 340,
       ),
       Product(
         category: Category.rolls,
@@ -200,7 +209,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Красный дракон',
         description: 'Ролл с копченым угрем, лососем м\с, сливочным сыром, салатом чука, икрой летучей рыбы, огурцом и японским майонезом\n (315гр/8шт.)',
-        price: 450,
+        stockprice: 392,
+        price: 490,
       ),
       Product(
         category: Category.rolls,
@@ -208,7 +218,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Зеленый дракон',
         description: 'Ролл с копченым угрем, лососем м\с, сливочным сыром, салатом чука, икрой летучей рыбы, огурцом, авокадо, соусом унаги и жареным кунжутом\n (320гр/8шт.)',
-        price: 350,
+        stockprice: 296,
+        price: 370,
       ),
       Product(
         category: Category.rolls,
@@ -216,7 +227,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Фудзияма',
         description: 'Ролл с двумя видами икры летучей рыбы, запеченым лососем, сливочным сыром и огурцом\n (290гр/8шт.)',
-        price: 340,
+        stockprice: 296,
+        price: 370,
       ),
       Product(
         category: Category.rolls,
@@ -224,6 +236,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Smoke ролл',
         description: 'Ролл с копченым лососем, сливочным сыром, авокадо\n (280гр/8шт.)',
+        stockprice: 248,
         price: 310,
       ),
       Product(
@@ -232,6 +245,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Кайсо Футомаки',
         description: 'Ролл с запечным лососем, сливочным сыром, морковью, авокадо, икрой летучей рыбы, салатом чука и ореховым соусом (285гр/8шт.)',
+        stockprice: 248,
         price: 310,
       ),
       Product(
@@ -240,7 +254,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Якудза',
         description: 'Пикантный ролл с запечеными мидиями, огурцом, авокадо, соусом спайси и перцем Чили\n (265гр/8шт.)',
-        price: 250,
+        stockprice: 232,
+        price: 290,
       ),
       Product(
         category: Category.rolls,
@@ -248,7 +263,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Васаби',
         description: 'Ролл с лососем м\с, тигровыми креветками, сливочным сыром, авокадо и икрой летучей рыбы с васаби (300гр/8шт.)',
-        price: 320,
+        stockprice: 272,
+        price: 340,
       ),
       Product(
         category: Category.rolls,
@@ -256,7 +272,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Гинза',
         description: 'Футомаки ролл с тигровыми креветками, авокадо, сливочным сыром, лососем м\с и красной икрой\n (325гр/8шт.)',
-        price: 420,
+        stockprice: 392,
+        price: 490,
       ),
       Product(
         category: Category.rolls,
@@ -264,7 +281,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Вегетерия',
         description: 'Футомаки ролл с морковью, авокадо, сладким перцем, томатами и огурцом\n (290гр/8шт.)',
-        price: 250,
+        stockprice: 224,
+        price: 290,
       ),
       Product(
         category: Category.rolls,
@@ -272,7 +290,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл императорский',
         description: 'Ролл лососем м\с, тигровыми креветками, сливочным сыром, авокадо, огурцом и икрой летучей рыбы\n (320гр/8шт.)',
-        price: 370,
+        stockprice: 312,
+        price: 390,
       ),
       Product(
         category: Category.rolls,
@@ -280,7 +299,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Темпура лосось',
         description: 'Жареный в сухарях Панно ролл с лососем м\с, сливочным сыром, икрой летучей рыбы и листьями салата\n (315гр/8шт.)',
-        price: 310,
+        stockprice: 288,
+        price: 360,
       ),
       Product(
         category: Category.rolls,
@@ -288,7 +308,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Темпура креветка',
         description: 'Жареный с сухарях Панно ролл с тигровыми креветками, сливочным сыром, икрой летучей рыбы и листьями салата\n (315гр/8шт.)',
-        price: 300,
+        stockprice: 280,
+        price: 350,
       ),
       Product(
         category: Category.rolls,
@@ -296,7 +317,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл Темпура угорь',
         description: 'Жареный с сухарях Панно ролл с копченым угрем, сливочным сыром, икрой летучей рыбы и листьями салата\n (315гр/8шт.)',
-        price: 320,
+        stockprice: 296,
+        price: 370,
       ),
       Product(
         category: Category.rolls,
@@ -304,6 +326,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Ролл с огурцом',
         description: 'Маки ролл с огурцом\n (155гр/8шт.)',
+        stockprice: 104,
         price: 130,
       ),
       Product(
@@ -312,7 +335,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Сет для двоих ',
         description: 'Ролл с лососем, Ролл с огурцом, Филадельфия с лососем, Калифорния с креветкой\n (865гр)',
-        price: 750,
+        stockprice: 688,
+        price: 860,
       ),
       Product(
         category: Category.sets,
@@ -320,7 +344,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Сет для друзей',
         description: 'Филадельфия с лососем, Калифорния со снежным крабом, Гинза, Фудзияма, Калифорния с креветкой, Спайси лосось с авокадо, Ролл с угрем и огурцом\n (1755гр)',
-        price: 1850,
+        stockprice: 1688,
+        price: 2110,
       ),
       Product(
         category: Category.sets,
@@ -328,7 +353,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Сет Кхалилси',
         description: 'Зеленый дракон, Красный дракон, Филадельфия с угрем\n (940гр)',
-        price: 1050,
+        stockprice: 912,
+        price: 1140,
       ),
       Product(
         category: Category.sets,
@@ -336,7 +362,8 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Темпура Сет',
         description: 'Темпура лосось, Темпура креветка, Темпура угорь\n (945гр)',
-        price: 880,
+        stockprice: 776,
+        price: 970,
       ),
       Product(
         category: Category.drinks,
@@ -578,55 +605,6 @@ class ProductsRepository {
         description: 'Булка для гамбургеров, соус сырный, соус кетчуп, айсберг, огурцы маринованные, котлета из говядины, сыр Чеддер, помидоры, перец болгарский',
         price: 200,
       ),
-      Product(
-        category: Category.rolls,
-        id: 69,
-        isFeatured: true,
-        name: 'Запеченный угорь',
-        description: 'Отличный ролл с угрём авокадо и лососем , панированный в кунжуте под соусом унаги',
-        price: 350,
-      ),
-      Product(
-        category: Category.rolls,
-        id: 70,
-        isFeatured: true,
-        name: 'Запеченный лосось',
-        description: 'Вкуснейший запечённый лосось ,панированный в икре тобико ,под вкусным сырным кремом',
-        price: 350,
-      ),
-      Product(
-        category: Category.rolls,
-        id: 71,
-        isFeatured: true,
-        name: 'Запеченная креветка',
-        description: 'Ролл с креветкой ,авокадо,снежным крабом под сырно-соевым кремом , панированный в икре тобико',
-        price: 300,
-      ),
-      Product(
-        category: Category.sets,
-        id: 72,
-        isFeatured: true,
-        name: 'Cет Филадельфия',
-        description: 'Филадельфия лосось, Филадельфия угорь , Филадельфия тобико',
-        price: 850,
-      ),
-      Product(
-        category: Category.sets,
-        id: 73,
-        isFeatured: true,
-        name: 'Запечённый сет',
-        description: 'Запечённый лосось, Запечённая креветка, Запечённый угорь',
-        price: 900,
-      ),
-      Product(
-        category: Category.sets,
-        id: 74,
-        isFeatured: true,
-        name: 'Cет Банзай',
-        description: 'Филадельфия тобико, Якудза,Ролл Спайси, Ролл васаби, Каникулы спайси',
-        price: 1140,
-      ),
-
       
       
       

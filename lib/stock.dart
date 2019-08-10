@@ -21,7 +21,7 @@ Widget stockPage(BuildContext context) {
   child: ListView(
     //verticalDirection: VerticalDirection.down,
     children: <Widget>[
-      bodyWidget(context, Icons.cake, Colors.red, "День рождение? Скидка 20%!",
+      bodyWidget(context, Icons.cake, Colors.red, "День рождения? Скидка 20%!",
       "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
       bodyWidget(context, Icons.drive_eta, Colors.green, "Самовывоз - 15%!",
       "Заберите свой заказ сами и получите скидку в размере 15%!",),
