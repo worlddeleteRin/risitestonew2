@@ -81,6 +81,18 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(
+      r"<[^>]*>",
+      multiLine: true,
+      caseSensitive: true
+    );
+
+    return htmlText.replaceAll(exp, '');
+  }
+
+
+
     final NumberFormat formatter = NumberFormat.currency(
         decimalDigits: 0, locale: "ru_RU", symbol: "руб." );
     final ThemeData theme = Theme.of(context);
@@ -266,7 +278,7 @@ class ProductCard extends StatelessWidget {
                       maxLines: 4,
                     ),
                     Text(
-                      product == null ? '' : product[index]["description"],
+                      product == null ? '' : removeAllHtmlTags(product[index]["description"]),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,

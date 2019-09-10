@@ -108,6 +108,8 @@ class _ShrineAppState extends State<ShrineApp>
 
     List customersList = customers;
 
+    print(p);
+
     //print(p.length);
     if (current_user_email.isEmpty) {
       int user_id = prefs.getInt('id');

@@ -38,15 +38,27 @@ class _StockPageState extends State<StockPage> {
     );
   }
 
+String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(
+      r"<[^>]*>",
+      multiLine: true,
+      caseSensitive: true
+    );
+
+    return htmlText.replaceAll(exp, '');
+  }
 
 Widget stockPage(BuildContext context) {
+  
   return Container(
         child: ListView.builder(
         itemCount: widget.products_stocks.length,
         itemBuilder: (_, index) {
-      
+      String description = widget.products_stocks[index]['description'];
+      String formatted_desc = removeAllHtmlTags(description);
+
       return bodyWidget(context, index, Colors.red, "${widget.products_stocks[index]['name']}",
-      "${widget.products_stocks[index]['description']}",);
+      "$formatted_desc",);
       // bodyWidget(context, Icons.drive_eta, Colors.green, "Самовывоз - 15%!",
       // "Заберите свой заказ сами и получите скидку в размере 15%!",),
     
@@ -68,7 +80,7 @@ index, sColor, sheader, sdesc
     ),
     child: new Stack(
       children: <Widget>[
-        stockCard(context),
+        // stockCard(context),
         stockCardContent(context, sheader, sdesc),
         stockThumbnail(context, index, sColor),
       ],
@@ -116,7 +128,7 @@ Widget stockCard(BuildContext context) {
     double width = 500;
 
   return Container(
-    height: 100,
+    
     width: 600,
       margin: new EdgeInsets.fromLTRB(160.0, 50.0, 16.0, 16.0),
       //constraints: new BoxConstraints.expand(),
