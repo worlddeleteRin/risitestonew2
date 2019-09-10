@@ -36,12 +36,12 @@ Widget build(BuildContext context) {
     body: Center(
       child: Column(
         children: <Widget>[
-          Container(padding: EdgeInsets.only(top: 40),),
+          Container(padding: EdgeInsets.only(top: 30),),
           Icon(
             Icons.mail_outline,
             size: 100,
             ),
-            Container(padding: EdgeInsets.only(top: 30)),
+            Container(padding: EdgeInsets.only(top: 20)),
             Text(
               'Забыли пароль?',
               style: TextStyle(

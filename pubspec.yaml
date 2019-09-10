@@ -9,7 +9,7 @@ dependencies:
   intl: ^0.15.7
   scoped_model: ^0.3.0
   shrine_images: ^1.0.0
-  mailer: ^3.0.1
+  mailer: ^3.0.2
   stepper_touch: ^0.0.1
   wave_progress_widget: ^0.0.1
   connectivity: ^0.4.3+6
