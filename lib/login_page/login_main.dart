@@ -16,6 +16,8 @@ import '../model/app_state_model.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'dart:io';
+
 
 
 class LoginPage extends StatefulWidget {
@@ -26,6 +28,8 @@ AppStateModel model;
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  bool _internet_result = false;
 
 
 String email_field;
@@ -89,11 +93,15 @@ Widget CreateAccountButton(pr, model) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
-          // print(email_field + ' ' + password_field);
-          // registerUser();
+          
+          await checkConnectivity();
+           if (_internet_result == false) {
+             _noInternetConnection(context);
+           } else {
           registerUser(pr, model);
+           }
           
           }
           // registerUser();
@@ -112,11 +120,14 @@ Widget LoginButton(pr, model) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState.validate()) {
-          // print(email_field + ' ' + password_field);
-          // registerUser();
-          signInUser(pr, model);
+          await checkConnectivity();
+          if (_internet_result == false) {
+            _noInternetConnection(context);
+          } else {
+            signInUser(pr, model);
+          }
           }
           // registerUser();
           // Navigator.of(context).pushNamed(HomePage.tag);
@@ -184,6 +195,59 @@ Widget LoginButton(pr, model) {
       ],
       ),
   );                    
+}
+
+_noInternetConnection(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.red,
+        shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+        title: Text('Нет соединения с интернетом!',
+        style: TextStyle(
+          color: Colors.white,
+        )
+        ),
+        content: Icon(
+          Icons.signal_wifi_off,
+          size: 80,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            height: 50,
+            minWidth: 120,
+            color: Colors.orange,
+            shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
+            child: Text(
+              'ОК',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+checkConnectivity() async {
+  try {
+  final result = await InternetAddress.lookup('google.com');
+  if (result[0].rawAddress.isNotEmpty) {
+    setState(() => this._internet_result = true);
+  }
+} on SocketException catch (_) {
+  return false;
+}
 }
 
   registerUser(pr, model) async {

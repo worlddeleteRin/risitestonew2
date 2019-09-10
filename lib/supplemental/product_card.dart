@@ -133,7 +133,7 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget> [
           Text(
-                      product == null ? '' : '${product[index]["price"]} руб.',
+                      product == null ? '' : '${product[index]["regular_price"]} руб.',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 11,
@@ -153,7 +153,7 @@ class ProductCard extends StatelessWidget {
                       )
           ),*/
           Text(
-                      product == null ? '' : product[index]["price"] == null ? '${product[index]["price"]}' : '${product[index]["stockprice"]}',
+                      product == null ? '' : product[index]["sale_price"] == null ? '${product[index]["regular_price"]}' : '${product[index]["sale_price"]}',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 19,
@@ -191,7 +191,7 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget> [
           Text(
-                      product == null ? '' : product[index]["stockprice"] == null ? '${product[index]["price"]}' : '${product[index]["stockprice"]}',
+                      product == null ? '' : product[index]["regular_price"] == null ? '${product[index]["sale_price"]}' : '${product[index]["regular_price"]}',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 15,
@@ -249,7 +249,7 @@ class ProductCard extends StatelessWidget {
 
 
               Positioned(
-              child: product[index]["stockprice"] == null ? priceWidget : stockpriceWidget, 
+              child: product[index]["sale_price"].isEmpty == true ? priceWidget : stockpriceWidget, 
             top: -35,
             right: 0,
           ),
@@ -265,6 +265,7 @@ class ProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    Container(padding: EdgeInsets.only(top: 10)),
                     Text(
                       product == null ? '' : product[index]["name"],
                       textAlign: TextAlign.center,
@@ -277,6 +278,7 @@ class ProductCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
                     ),
+                    Container(padding: EdgeInsets.only(top: 5)),
                     Text(
                       product == null ? '' : removeAllHtmlTags(product[index]["description"]),
                       textAlign: TextAlign.center,

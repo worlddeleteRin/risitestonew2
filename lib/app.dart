@@ -78,6 +78,8 @@ class _ShrineAppState extends State<ShrineApp>
   // of expanding bottom sheet.
   AnimationController _controller;
 
+  var prefs_local;
+
   @override
   void initState() {
     super.initState();
@@ -92,6 +94,8 @@ class _ShrineAppState extends State<ShrineApp>
 
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs_local = prefs;
 
     /// Initialize the API
     WooCommerceAPI wc_api = new WooCommerceAPI(
@@ -157,7 +161,7 @@ class _ShrineAppState extends State<ShrineApp>
       case 0: 
       return StockPage(allproducts, products_stocks);
       case 1: 
-      return ProductMainPage(allproducts, products_pizza, products_rolls, products_sets, products_drinks, products_burgers, products_supplements, products_stocks, current_user_email);
+      return ProductMainPage(allproducts, products_pizza, products_rolls, products_sets, products_drinks, products_burgers, products_supplements, products_stocks, current_user_email, prefs_local);
       case 2:  
       return ShoppingCartPage(allproducts);
 
@@ -253,7 +257,7 @@ class _ShrineAppState extends State<ShrineApp>
     }
 
 
-Widget MainDrawer(List allproducts, List products_stocks, List current_user_email) {
+Widget MainDrawer(List allproducts, List products_stocks, List current_user_email, var prefs_local) {
 
     
     return Builder(builder: (context) =>
@@ -303,6 +307,7 @@ Widget MainDrawer(List allproducts, List products_stocks, List current_user_emai
                 leading: Icon(Icons.exit_to_app, color: Colors.black),
                 trailing: Icon(Icons.keyboard_arrow_right, color: Colors.red),
               onTap: () {
+                prefs_local.setInt('id', null);
                 //Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => LoginPage()));
@@ -420,7 +425,7 @@ const ColorScheme kShrineColorScheme = ColorScheme(
 
 class ProductMainPage extends StatefulWidget {
 
-  ProductMainPage(this.allproducts, this.products_pizza, this.products_rolls, this.products_sets, this.products_drinks, this.products_burgers, this.products_supplements, this.products_stocks, this.current_user_email);
+  ProductMainPage(this.allproducts, this.products_pizza, this.products_rolls, this.products_sets, this.products_drinks, this.products_burgers, this.products_supplements, this.products_stocks, this.current_user_email, this.prefs_local);
 
   List allproducts;
   AsyncSnapshot s;
@@ -434,6 +439,8 @@ class ProductMainPage extends StatefulWidget {
   List products_stocks;
 
   List current_user_email;
+
+  var prefs_local;
 
 
   AppStateModel model;
@@ -449,7 +456,7 @@ Widget build(BuildContext context) {
     return DefaultTabController(
       length: 6,
    child: Scaffold(
-          drawer: MainDrawer(widget.allproducts, widget.products_stocks, widget.current_user_email),
+          drawer: MainDrawer(widget.allproducts, widget.products_stocks, widget.current_user_email, widget.prefs_local),
           appBar: AppBar(
             backgroundColor: Colors.black87,
             bottom: TabBar(

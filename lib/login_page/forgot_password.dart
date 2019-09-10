@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'login_main.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'dart:io';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class ForgotPage extends StatefulWidget {
 
@@ -16,11 +18,14 @@ class ForgotPage extends StatefulWidget {
 
 class _ForgotPageState extends State<ForgotPage> {
 
+  bool _internet_result = false;
+
   String email_field_forgot;
   final _formKey = GlobalKey<FormState>();
 
 @override
 Widget build(BuildContext context) {
+  var pr = new ProgressDialog(context,ProgressDialogType.Normal);
   return Scaffold(
     backgroundColor: Colors.white,
     appBar: AppBar(
@@ -94,9 +99,18 @@ Widget build(BuildContext context) {
                 // color: Colors.redAccent
                 // ),
               ],),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                  mailUserPass();
+                  pr.show();
+                  await checkConnectivity();
+                  if (_internet_result == false) {
+                    pr.hide();
+                    _noInternetConnection(context);
+                  } else {
+                  await mailUserPass();
+                  pr.hide();
+                  _MailPassCompleted(context);
+                  }
               }
               },
             )
@@ -104,6 +118,102 @@ Widget build(BuildContext context) {
       ),
     ),
   );
+}
+_noInternetConnection(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.red,
+        shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+        title: Text('Нет соединения с интернетом!',
+        style: TextStyle(
+          color: Colors.white,
+        )
+        ),
+        content: Icon(
+          Icons.signal_wifi_off,
+          size: 80,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            height: 50,
+            minWidth: 120,
+            color: Colors.orange,
+            shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
+            child: Text(
+              'ОК',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+_MailPassCompleted(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.black87,
+        shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+        title: Text('Ваш пароль для входа отправлен на указанную почту!',
+        style: TextStyle(
+          color: Colors.white,
+        )
+        ),
+        content: Icon(
+          Icons.done_outline,
+          size: 90,
+          color: Colors.green,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            height: 50,
+            minWidth: 120,
+            color: Colors.orange,
+            shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
+            child: Text(
+              'ОК',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => LoginPage()));
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+checkConnectivity() async {
+  try {
+  final result = await InternetAddress.lookup('google.com');
+  if (result[0].rawAddress.isNotEmpty) {
+    setState(() => this._internet_result = true);
+  }
+} on SocketException catch (_) {
+  return false;
+}
 }
 
   mailUserPass() async {

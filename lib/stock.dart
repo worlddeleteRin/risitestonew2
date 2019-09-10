@@ -5,6 +5,8 @@ import 'shopping_cart.dart';
 import 'package:wordpress_api/wordpress_api.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'dart:math' as math;
+
 
 class StockPage extends StatefulWidget {
 
@@ -54,11 +56,17 @@ Widget stockPage(BuildContext context) {
         child: ListView.builder(
         itemCount: widget.products_stocks.length,
         itemBuilder: (_, index) {
-      String description = widget.products_stocks[index]['description'];
-      String formatted_desc = removeAllHtmlTags(description);
+      var image = (widget.products_stocks[index]["images"][0]["src"]);
+      String description = removeAllHtmlTags(widget.products_stocks[index]["description"]);
 
-      return bodyWidget(context, index, Colors.red, "${widget.products_stocks[index]['name']}",
-      "$formatted_desc",);
+      return AwesomeListItem(
+                    title: widget.products_stocks[index]["name"],
+                    content: description,
+                    color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
+                    image: image,
+                    );
+      // return bodyWidget(context, index, Colors.red, "${widget.products_stocks[index]['name']}",
+      // "$formatted_desc",);
       // bodyWidget(context, Icons.drive_eta, Colors.green, "Самовывоз - 15%!",
       // "Заберите свой заказ сами и получите скидку в размере 15%!",),
     
@@ -82,7 +90,7 @@ index, sColor, sheader, sdesc
       children: <Widget>[
         // stockCard(context),
         stockCardContent(context, sheader, sdesc),
-        stockThumbnail(context, index, sColor),
+        // stockThumbnail(context, index, sColor),
       ],
     )
   ); 
@@ -127,10 +135,10 @@ Widget stockCard(BuildContext context) {
   Widget stockCardContent(BuildContext context, sheader, sdesc) {
     double width = 500;
 
-  return Container(
+  return Card(
     
-    width: 600,
-      margin: new EdgeInsets.fromLTRB(160.0, 50.0, 16.0, 16.0),
+    // width: 600,
+      margin: new EdgeInsets.fromLTRB(50.0, 20.0, 16.0, 16.0),
       //constraints: new BoxConstraints.expand(),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,10 +155,12 @@ Widget stockCard(BuildContext context) {
           new Container(height: 10.0),
           new Text(
             sdesc,
+            textAlign: TextAlign.center,
             softWrap: true,
             maxLines: 40,
             style: TextStyle(
-              fontSize: 12,
+              decorationStyle: TextDecorationStyle.dotted,
+              fontSize: 13,
               color: Colors.black,
             ),
             ),
@@ -159,4 +169,109 @@ Widget stockCard(BuildContext context) {
   );
   }
 
+}
+
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path p = new Path();
+    p.lineTo(size.width, 0.0);
+    p.lineTo(size.width, size.height / 4.75);
+    p.lineTo(0.0, size.height / 3.75);
+    p.close();
+    return p;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldClipper) {
+    return true;
+  }
+}
+
+class AwesomeListItem extends StatefulWidget {
+  String title;
+  String content;
+  Color color;
+  String image;
+
+  AwesomeListItem({this.title, this.content, this.color, this.image});
+
+  @override
+  _AwesomeListItemState createState() => new _AwesomeListItemState();
+}
+
+class _AwesomeListItemState extends State<AwesomeListItem> {
+  @override
+  Widget build(BuildContext context) {
+    return new Row(
+      children: <Widget>[
+        new Container(width: 10.0, height: 190.0, color: widget.color),
+        new Expanded(
+          child: new Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Text(
+                  widget.title,
+                  style: TextStyle(
+                      fontFamily: 'Greece',
+                      color: Colors.redAccent,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold),
+                ),
+                new Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: new Text(
+                    widget.content,
+                    style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        new Container(
+          height: 150.0,
+          width: 150.0,
+          color: Colors.white,
+          child: Stack(
+            children: <Widget>[
+              new Transform.translate(
+                offset: new Offset(50.0, 0.0),
+                child: new Container(
+                  height: 100.0,
+                  width: 100.0,
+                  color: widget.color,
+                ),
+              ),
+              new Transform.translate(
+                offset: Offset(10.0, 20.0),
+                child: new Card(
+                  elevation: 20.0,
+                  child: new Container(
+                    height: 120.0,
+                    width: 120.0,
+                    decoration: new BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                            width: 10.0,
+                            color: Colors.white,
+                            style: BorderStyle.solid),
+                        image: DecorationImage(
+                          image: NetworkImage(widget.image),
+                        )),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
