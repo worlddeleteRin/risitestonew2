@@ -31,7 +31,7 @@ class ProductsRepository {
         isFeatured: true,
         name: '4 Стихии',
         description: 'Пицца на красном соусе с сыром моцарелла, запеченой курицей, грибами, томатами, ветчиной, салями, дор блю, Фетой, ялтинским луком, беконом,охотн колбасками',
-        price: 420,
+        price: 500,
       ),
       Product(
         category: Category.pizza,
@@ -39,7 +39,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Чикен',
         description: 'Пицца на крсном соусе с запеченным куриным филе, шампиньонами, болгарским перцем, томатами и сыром моцарелла',
-        price: 380,
+        price: 400,
       ),
       Product(
         category: Category.pizza,
@@ -47,7 +47,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Мужской сезон',
         description: 'Пицца на красном соусе с сыром моцарелла, помидорами, салями, ветчиной, беконом, охотн. колбасками и луком Ялта',
-        price: 420,
+        price: 470,
       ),
       Product(
         category: Category.pizza,
@@ -55,7 +55,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Пепперони',
         description: 'Пицца на красном соусе с салями, сыром моцарелла и маслинами',
-        price: 490,
+        price: 380,
       ),
        Product(
         category: Category.pizza,
@@ -63,7 +63,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'BBQ',
         description: 'Пицца на красном соусе с запеченным куриным филе, ветчиной, болгарским перцем, ялтинским луком, сыром моцарелла и соусом Барбекю',
-        price: 390,
+        price: 420,
       ),
       Product(
         category: Category.pizza,
@@ -79,7 +79,7 @@ class ProductsRepository {
         isFeatured: true,
         name: '4 Сыра',
         description: 'Пицца на белом соусе с сырами моцарелла, фета, дор блю, пармезан',
-        price: 490,
+        price: 450,
       ),
       Product(
         category: Category.pizza,
@@ -95,7 +95,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Пицца Чили',
         description: 'Пицца на остром соусе с ветчиной, охотничьими колбасками, сыром моцарелла, томатами, ялтинским луком, и перцем чили',
-        price: 490,
+        price: 450,
       ),
        Product(
         category: Category.pizza,
@@ -103,7 +103,7 @@ class ProductsRepository {
         isFeatured: true,
         name: 'Пицца Цезарь',
         description: 'Пицца на белом соусе с запеченным куриным филе, перепелиными яйцами, беконом, сыром моцарелла, пармезаном, свежими томатами и листьями салата',
-        price: 480,
+        price: 450,
       ),
       Product(
         category: Category.rolls,
@@ -567,7 +567,7 @@ class ProductsRepository {
         id: 67,
         isFeatured: true,
         name: 'Фирменный',
-        description: 'Булка для для гамбургеров, соус, кетчуп, огурцы маринованные, айсберг, котлета из говядины, сыр, бекон, помидоры, сыр, чеддер, котлета из говядины, лук ялта ',
+        description: 'Булочка для гамбургеров, соус, кетчуп, огурцы маринованные, айсберг, котлета из говядины, сыр, бекон, помидоры, сыр, чеддер, котлета из говядины, лук ялта ',
         price: 250,
       ),
       Product(
@@ -621,6 +621,7 @@ class ProductsRepository {
       Product(
         category: Category.sets,
         id: 74,
+        isnew: true,
         isFeatured: true,
         name: 'Cет Банзай',
         description: 'Филадельфия тобико, Якудза,Ролл Спайси, Ролл васаби, Каникулы спайси',

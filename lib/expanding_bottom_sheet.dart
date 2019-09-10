@@ -24,6 +24,8 @@ import 'model/app_state_model.dart';
 import 'model/product.dart';
 import 'shopping_cart.dart';
 
+/*
+
 // These curves define the emphasized easing curve.
 const Cubic _kAccelerateCurve = Cubic(0.548, 0.0, 0.757, 0.464);
 const Cubic _kDecelerateCurve = Cubic(0.23, 0.94, 0.41, 1.0);
@@ -38,9 +40,11 @@ const double _kCornerRadius = 24.0;
 const double _kWidthForCartIcon = 64.0;
 
 class ExpandingBottomSheet extends StatefulWidget {
-  const ExpandingBottomSheet({Key key, @required this.hideController})
+  ExpandingBottomSheet({Key key, @required this.hideController, this.allproducts})
       : assert(hideController != null),
         super(key: key);
+
+  List allproducts;
 
   final AnimationController hideController;
 
@@ -59,6 +63,7 @@ class ExpandingBottomSheet extends StatefulWidget {
     throw FlutterError(
         'ExpandingBottomSheet.of() called with a context that does not contain a ExpandingBottomSheet.\n');
   }
+  
 }
 
 // Emphasized Easing is a motion curve that has an organic, exciting feeling.
@@ -115,319 +120,7 @@ double _getPeakPoint({double begin, double end}) {
   return begin + (end - begin) * _kPeakVelocityProgress;
 }
 
-class _ExpandingBottomSheetState extends State<ExpandingBottomSheet>
-    with TickerProviderStateMixin {
-  final GlobalKey _expandingBottomSheetKey =
-      GlobalKey(debugLabel: 'Expanding bottom sheet');
 
-  // The width of the Material, calculated by _widthFor() & based on the number
-  // of products in the cart. 64.0 is the width when there are 0 products
-  // (_kWidthForZeroProducts)
-  double _width = _kWidthForCartIcon;
-  // Controller for the opening and closing of the ExpandingBottomSheet
-  AnimationController _controller;
-  // Animations for the opening and closing of the ExpandingBottomSheet
-  Animation<double> _widthAnimation;
-  Animation<double> _heightAnimation;
-  Animation<double> _thumbnailOpacityAnimation;
-  Animation<double> _cartOpacityAnimation;
-  Animation<double> _shapeAnimation;
-  Animation<Offset> _slideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Animation<double> _getWidthAnimation(double screenWidth) {
-    if (_controller.status == AnimationStatus.forward) {
-      // Opening animation
-      return Tween<double>(begin: _width, end: screenWidth).animate(
-        CurvedAnimation(
-          parent: _controller.view,
-          curve: Interval(0.0, 0.3, curve: Curves.fastOutSlowIn),
-        ),
-      );
-    } else {
-      // Closing animation
-      return _getEmphasizedEasingAnimation(
-        begin: _width,
-        peak: _getPeakPoint(begin: _width, end: screenWidth),
-        end: screenWidth,
-        isForward: false,
-        parent: CurvedAnimation(
-            parent: _controller.view, curve: Interval(0.0, 0.87)),
-      );
-    }
-  }
-
-  Animation<double> _getHeightAnimation(double screenHeight) {
-    if (_controller.status == AnimationStatus.forward) {
-      // Opening animation
-
-      return _getEmphasizedEasingAnimation(
-        begin: _kCartHeight,
-        peak: _kCartHeight +
-            (screenHeight - _kCartHeight) * _kPeakVelocityProgress,
-        end: screenHeight,
-        isForward: true,
-        parent: _controller.view,
-      );
-    } else {
-      // Closing animation
-      return Tween<double>(
-        begin: _kCartHeight,
-        end: screenHeight,
-      ).animate(
-        CurvedAnimation(
-          parent: _controller.view,
-          curve: Interval(0.434, 1.0, curve: Curves.linear), // not used
-          // only the reverseCurve will be used
-          reverseCurve:
-              Interval(0.434, 1.0, curve: Curves.fastOutSlowIn.flipped),
-        ),
-      );
-    }
-  }
-
-  // Animation of the cut corner. It's cut when closed and not cut when open.
-  Animation<double> _getShapeAnimation() {
-    if (_controller.status == AnimationStatus.forward) {
-      return Tween<double>(begin: _kCornerRadius, end: 0.0).animate(
-        CurvedAnimation(
-          parent: _controller.view,
-          curve: Interval(0.0, 0.3, curve: Curves.fastOutSlowIn),
-        ),
-      );
-    } else {
-      return _getEmphasizedEasingAnimation(
-        begin: _kCornerRadius,
-        peak: _getPeakPoint(begin: _kCornerRadius, end: 0.0),
-        end: 0.0,
-        isForward: false,
-        parent: _controller.view,
-      );
-    }
-  }
-
-  Animation<double> _getThumbnailOpacityAnimation() {
-    return Tween<double>(begin: 1.0, end: 0.0).animate(
-      CurvedAnimation(
-        parent: _controller.view,
-        curve: _controller.status == AnimationStatus.forward
-            ? Interval(0.0, 0.3)
-            : Interval(0.532, 0.766),
-      ),
-    );
-  }
-
-  Animation<double> _getCartOpacityAnimation() {
-    return CurvedAnimation(
-      parent: _controller.view,
-      curve: _controller.status == AnimationStatus.forward
-          ? Interval(0.3, 0.6)
-          : Interval(0.766, 1.0),
-    );
-  }
-
-  // Returns the correct width of the ExpandingBottomSheet based on the number of
-  // products in the cart.
-  double _widthFor(int numProducts) {
-    switch (numProducts) {
-      case 0:
-        return _kWidthForCartIcon;
-        break;
-      case 1:
-        return 136.0;
-        break;
-      case 2:
-        return 192.0;
-        break;
-      case 3:
-        return 248.0;
-        break;
-      default:
-        return 278.0;
-    }
-  }
-
-  // Returns true if the cart is open or opening and false otherwise.
-  bool get _isOpen {
-    final AnimationStatus status = _controller.status;
-    return status == AnimationStatus.completed ||
-        status == AnimationStatus.forward;
-  }
-
-  // Opens the ExpandingBottomSheet if it's closed, otherwise does nothing.
-  void open() {
-    if (!_isOpen) {
-      _controller.forward();
-    }
-  }
-
-  // Closes the ExpandingBottomSheet if it's open or opening, otherwise does nothing.
-  void close() {
-    if (_isOpen) {
-      _controller.reverse();
-    }
-  }
-
-  // Changes the padding between the start edge of the Material and the cart icon
-  // based on the number of products in the cart (padding increases when > 0
-  // products.)
-  EdgeInsetsDirectional _cartPaddingFor(int numProducts) {
-    if (numProducts == 0) {
-      return EdgeInsetsDirectional.only(start: 20.0, end: 8.0);
-    } else {
-      return EdgeInsetsDirectional.only(start: 32.0, end: 8.0);
-    }
-  }
-
-  bool get _cartIsVisible => _thumbnailOpacityAnimation.value == 0.0;
-
-  Widget _buildThumbnails(int numProducts) {
-    return ExcludeSemantics(
-      child: Opacity(
-        opacity: _thumbnailOpacityAnimation.value,
-        child: Column(children: <Widget>[
-          Row(children: <Widget>[
-            AnimatedPadding(
-              padding: _cartPaddingFor(numProducts),
-              child: Icon(Icons.shopping_cart,
-              color: Colors.black,
-              ),
-              duration: Duration(milliseconds: 225),
-            ),
-            Container(
-              // Accounts for the overflow number
-              width: numProducts > 3 ? _width - 94.0 : _width - 64.0,
-              height: _kCartHeight,
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: ProductThumbnailRow(),
-            ),
-            ExtraProductsNumber()
-          ]),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildShoppingCartPage() {
-    return Opacity(
-      opacity: _cartOpacityAnimation.value,
-      child: ShoppingCartPage(),
-    );
-  }
-
-  Widget _buildCart(BuildContext context, Widget child) {
-    // numProducts is the number of different products in the cart (does not
-    // include multiples of the same product).
-    final AppStateModel model = ScopedModel.of<AppStateModel>(context);
-    final int numProducts = model.productsInCart.keys.length;
-    final int totalCartQuantity = model.totalCartQuantity;
-    final Size screenSize = MediaQuery.of(context).size;
-    final double screenWidth = screenSize.width;
-    final double screenHeight = screenSize.height;
-
-    _width = _widthFor(numProducts);
-    _widthAnimation = _getWidthAnimation(screenWidth);
-    _heightAnimation = _getHeightAnimation(screenHeight);
-    _shapeAnimation = _getShapeAnimation();
-    _thumbnailOpacityAnimation = _getThumbnailOpacityAnimation();
-    _cartOpacityAnimation = _getCartOpacityAnimation();
-
-    return Semantics(
-      button: true,
-      value: 'Shopping cart, $totalCartQuantity items',
-      child: Container(
-        width: _widthAnimation.value,
-        height: _heightAnimation.value,
-        child: Material(
-          color: Colors.white,
-          //color: Color(0xFF333350),
-          animationDuration: Duration(milliseconds: 0),
-          shape: BeveledRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(_shapeAnimation.value),
-            ),
-          ),
-          elevation: 4.0,
-          child: _cartIsVisible
-              ? _buildShoppingCartPage()
-              : _buildThumbnails(numProducts),
-        ),
-      ),
-    );
-  }
-
-  // Builder for the hide and reveal animation when the backdrop opens and closes
-  Widget _buildSlideAnimation(BuildContext context, Widget child) {
-    _slideAnimation = _getEmphasizedEasingAnimation(
-      begin: Offset(1.0, 0.0),
-      peak: Offset(_kPeakVelocityProgress, 0.0),
-      end: Offset(0.0, 0.0),
-      isForward: widget.hideController.status == AnimationStatus.forward,
-      parent: widget.hideController,
-    );
-
-    return SlideTransition(
-      position: _slideAnimation,
-      child: child,
-    );
-  }
-
-  // Closes the cart if the cart is open, otherwise exits the app (this should
-  // only be relevant for Android).
-  Future<bool> _onWillPop() async {
-    if (!_isOpen) {
-      await SystemNavigator.pop();
-      return true;
-    }
-
-    close();
-    return true;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedSize(
-      key: _expandingBottomSheetKey,
-      duration: Duration(milliseconds: 225),
-      curve: Curves.easeInOut,
-      vsync: this,
-      alignment: FractionalOffset.topLeft,
-      child: WillPopScope(
-        onWillPop: _onWillPop,
-        child: AnimatedBuilder(
-          animation: widget.hideController,
-          builder: _buildSlideAnimation,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: open,
-            child: ScopedModelDescendant<AppStateModel>(
-              builder: (context, child, model) {
-                return AnimatedBuilder(
-                  builder: _buildCart,
-                  animation: _controller,
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class ProductThumbnailRow extends StatefulWidget {
   @override
@@ -456,9 +149,9 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
 
   Product _productWithId(int productId) {
     final AppStateModel model = ScopedModel.of<AppStateModel>(context);
-    final Product product = model.getProductById(productId);
-    assert(product != null);
-    return product;
+    //final Product product = model.getProductById(productId);
+    //assert(product != null);
+    //return product;
   }
 
   Widget _buildRemovedThumbnail(
@@ -668,3 +361,6 @@ class _ListModel {
 
   List<int> get list => _items;
 }
+
+
+*/

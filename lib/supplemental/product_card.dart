@@ -19,22 +19,27 @@ import 'package:scoped_model/scoped_model.dart';
 
 import '../model/app_state_model.dart';
 import '../model/product.dart';
+import 'dart:convert';
+// import 'package:woocommerce_api/woocommerce_api.dart';
+import '../woocommerce_api.dart';
+
+import 'dart:async';
 
 
 
 
 
 class ProductCard extends StatelessWidget {
-  ProductCard({this.imageAspectRatio = 50 / 50, this.product})
-      : assert(imageAspectRatio == null || imageAspectRatio > 0);
 
-  final double imageAspectRatio;
-  final Product product;
+  ProductCard(this.product);
+  
+  List product;
+  //List productsInCart = [];
 
   //static final kTextBoxHeight = 150.0;
 
   @override 
-  Widget _shoppingButton(BuildContext context) {
+  Widget _shoppingButton(BuildContext context, index) {
     return ScopedModelDescendant<AppStateModel>(
       builder: (context, child, model) => MaterialButton(
         materialTapTargetSize: MaterialTapTargetSize.padded,
@@ -44,7 +49,10 @@ class ProductCard extends StatelessWidget {
          borderRadius: new BorderRadius.circular(30.0)),
         color: Colors.orange,
         onPressed: () {
-          model.addProductToCart(product.id);
+          //productsInCart.add(product[index]);
+          //print(productsInCart);
+          model.addProductToCart(this.product[index]['id']);
+          //print(this.product[index]);
           /*Flushbar(
             aroundPadding: EdgeInsets.all(10),
             borderRadius: 10,
@@ -69,53 +77,35 @@ class ProductCard extends StatelessWidget {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
+
     final NumberFormat formatter = NumberFormat.currency(
         decimalDigits: 0, locale: "ru_RU", symbol: "руб." );
     final ThemeData theme = Theme.of(context);
 
+    //final imageWidget = Image.network(product.data[index]["images"][0]["src"]);
+
+    /*return ScopedModelDescendant<AppStateModel>(
+      builder: (context, child, model) => GestureDetector(
+            onTap: () {
+              model.addProductToCart(product.id);
+              // TODO: Add Snackbar
+            },
+            child: child,
+          ),
+      child: */
+
+  
+      return ListView.builder(
+            itemCount: product.length,
+            itemBuilder: (BuildContext context,index){
+              
+            //print(product.data[index]["categories"][0]["slug"]);
 
 
-    final priceWidget = Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40),
-              child: new Container(
-          width: 60.0,
-          height:60.0,
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.green,
-          ),
-          child: new Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget> [
-          Text(
-                      product == null ? '' : product.stockprice == null ? '${product.price}' : '${product.stockprice}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 19,
-                        fontFamily: "arial",
-                        color: Colors.white,
-                      )
-          ),
-          Text(
-            product == null ? '' : 'руб.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 10,
-                        fontFamily: "arial",
-                        color: Colors.white,
-                      )
-          ),
-          ],
-          ),
-          ),
-          ),
-            );
-      final stockpriceWidget = Padding(
+            final stockpriceWidget = Padding(
             padding: const EdgeInsets.symmetric(vertical: 35),
               child: new Container(
           width: 70.0,
@@ -131,7 +121,7 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget> [
           Text(
-                      product == null ? '' : '${product.price} руб.',
+                      product == null ? '' : '${product[index]["price"]} руб.',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 11,
@@ -151,7 +141,7 @@ class ProductCard extends StatelessWidget {
                       )
           ),*/
           Text(
-                      product == null ? '' : product.stockprice == null ? '${product.price}' : '${product.stockprice}',
+                      product == null ? '' : product[index]["price"] == null ? '${product[index]["price"]}' : '${product[index]["stockprice"]}',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         fontSize: 19,
@@ -173,21 +163,45 @@ class ProductCard extends StatelessWidget {
           ),
           ),
             );
-    final imageWidget = Image.asset(
-      product.assetName,
-      //package: product.assetPackage,
-      fit: BoxFit.cover,
-    );
-
-    /*return ScopedModelDescendant<AppStateModel>(
-      builder: (context, child, model) => GestureDetector(
-            onTap: () {
-              model.addProductToCart(product.id);
-              // TODO: Add Snackbar
-            },
-            child: child,
+            final priceWidget = Padding(
+            padding: const EdgeInsets.only(top: 40),
+              child: new Container(
+          width: 50.0,
+          height:50.0,
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.green,
           ),
-      child: */
+          child: new Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget> [
+          Text(
+                      product == null ? '' : product[index]["stockprice"] == null ? '${product[index]["price"]}' : '${product[index]["stockprice"]}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15,
+                        fontFamily: "arial",
+                        color: Colors.white,
+                      )
+          ),
+          Text(
+            product == null ? '' : 'руб.',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 8,
+                        fontFamily: "arial",
+                        color: Colors.white,
+                      )
+          ),
+          ],
+          ),
+          ),
+          ),
+            );
+
       return Card(
             borderOnForeground: true,
             elevation: 20,
@@ -209,21 +223,21 @@ class ProductCard extends StatelessWidget {
               //padding: EdgeInsets.symmetric(vertical: 11)
               //),
           
-              Center(
-              child:SizedBox(
+              Container(
+                padding: EdgeInsets.only(top: 1),
                 width: 130,
                 height: 130,
-              child: imageWidget,
+              child: Image.network(product[index]["images"][0]["src"]),
               /*child: AspectRatio(
                 aspectRatio: imageAspectRatio,
                 child: imageWidget,
               ),
               */
           ),
-              ),
+
 
               Positioned(
-              child: product.stockprice == null ? priceWidget : stockpriceWidget, 
+              child: product[index]["stockprice"] == null ? priceWidget : stockpriceWidget, 
             top: -35,
             right: 0,
           ),
@@ -240,7 +254,7 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      product == null ? '' : product.name,
+                      product == null ? '' : product[index]["name"],
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
@@ -252,7 +266,7 @@ class ProductCard extends StatelessWidget {
                       maxLines: 4,
                     ),
                     Text(
-                      product == null ? '' : product.description,
+                      product == null ? '' : product[index]["description"],
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,
@@ -273,7 +287,7 @@ class ProductCard extends StatelessWidget {
                       )
                     ),*/
                   Center(
-                child:_shoppingButton(context),
+                child:_shoppingButton(context, index),
                 ),
                   ],
                 ),
@@ -339,6 +353,8 @@ class ProductCard extends StatelessWidget {
             ),  
               ],
             ),
+      );
+            }
       );
   }
 

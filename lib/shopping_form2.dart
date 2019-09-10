@@ -1,5 +1,4 @@
 import 'package:Shrine/app.dart';
-import 'package:Shrine/home.dart';
 import 'package:flutter/material.dart';
 import 'mail_shopping.dart';
 import 'shopping_cart.dart';

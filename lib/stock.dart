@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
+import 'app.dart';
+import 'shopping_cart.dart';
+import 'package:wordpress_api/wordpress_api.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class StockPage extends StatelessWidget {
+
+class StockPage extends StatefulWidget {
+
+  StockPage(this.allproducts, this.products_stocks);
+
+  List allproducts;
+  List products_stocks;
+
+  _StockPageState createState() => _StockPageState();
+}
+
+class _StockPageState extends State<StockPage> {
+
+  //    fetchPosts() async {
+  //     WordPressAPI api = WordPressAPI('http://worlddelete.ru/risitesto');
+  //     final res = await api.getAsync('posts');
+  //     return res['data'];
+  // }
+
 
   @override
   Widget build(BuildContext context) {
+    // fetchPosts();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black87,
@@ -13,27 +37,26 @@ class StockPage extends StatelessWidget {
       body: stockPage(context),
     );
   }
-}
+
 
 Widget stockPage(BuildContext context) {
   return Container(
-    color: Color(0xFF333359),
-  child: ListView(
-    //verticalDirection: VerticalDirection.down,
-    children: <Widget>[
-      bodyWidget(context, Icons.cake, Colors.red, "День рождения? Скидка 20%!",
-      "Порадуйте себя в ваш день рождения! Закажите свою любимую пиццу, сет или роллы со скидкой 20%!",),
-      bodyWidget(context, Icons.drive_eta, Colors.green, "Самовывоз - 15%!",
-      "Заберите свой заказ сами и получите скидку в размере 15%!",),
-      bodyWidget(context, Icons.local_dining, Colors.yellow, "Скидка на роллы 20%!",
-      "Самая жаркая акция этого лета! Получи скидку на все роллы в размере 20%! Акция длится до 8 августа.",),
-    ],
-  ),
+        child: ListView.builder(
+        itemCount: widget.products_stocks.length,
+        itemBuilder: (_, index) {
+      
+      return bodyWidget(context, index, Colors.red, "${widget.products_stocks[index]['name']}",
+      "${widget.products_stocks[index]['description']}",);
+      // bodyWidget(context, Icons.drive_eta, Colors.green, "Самовывоз - 15%!",
+      // "Заберите свой заказ сами и получите скидку в размере 15%!",),
+    
+        },
+      ),
   );
 }
 
 Widget bodyWidget(BuildContext context,
-sIcon, sColor, sheader, sdesc
+index, sColor, sheader, sdesc
 ) {
   double width = .40 * MediaQuery.of(context).size.width;
   return new Container(
@@ -46,34 +69,35 @@ sIcon, sColor, sheader, sdesc
     child: new Stack(
       children: <Widget>[
         stockCard(context),
-        stockThumbnail(context, sIcon, sColor),
         stockCardContent(context, sheader, sdesc),
+        stockThumbnail(context, index, sColor),
       ],
     )
   ); 
 }
 
-Widget stockThumbnail(BuildContext context, sIcon, sColor) {
+Widget stockThumbnail(BuildContext context, index,  sColor) {
   return Container(
   margin: new EdgeInsets.symmetric(
     vertical: 16.0
   ),
   alignment: FractionalOffset.centerLeft,
-  child: Icon(
-    sIcon,
-    size: 100,
-    color: sColor,
-    ),
+  child: Image.network(widget.products_stocks[index]["images"][0]["src"],
+    width: 160,
+    height: 160,
+  )
 );
 }
 
 Widget stockCard(BuildContext context) {
-  double width = .40 * MediaQuery.of(context).size.width;
+    
+  // double width =  MediaQuery.of(context).size.width;
     return Container(
-     width: width,
-     margin: new EdgeInsets.only(left: 40.0),
+     width: 400,
+     height: 120,
+     margin: new EdgeInsets.only(left: 30.0, top: 40),
      decoration: new BoxDecoration(
-       color: new Color(0xFF333366),
+       color: Colors.blue,
        shape: BoxShape.rectangle,
        borderRadius: new BorderRadius.circular(8.0),
        boxShadow: <BoxShadow>[
@@ -89,8 +113,12 @@ Widget stockCard(BuildContext context) {
 
 
   Widget stockCardContent(BuildContext context, sheader, sdesc) {
+    double width = 500;
+
   return Container(
-      margin: new EdgeInsets.fromLTRB(100.0, 16.0, 16.0, 16.0),
+    height: 100,
+    width: 600,
+      margin: new EdgeInsets.fromLTRB(160.0, 50.0, 16.0, 16.0),
       //constraints: new BoxConstraints.expand(),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,7 +127,7 @@ Widget stockCard(BuildContext context) {
           new Text(
             sheader,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 18.0,
               fontWeight: FontWeight.w600
             ),
@@ -111,10 +139,12 @@ Widget stockCard(BuildContext context) {
             maxLines: 40,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.white,
+              color: Colors.black,
             ),
             ),
         ],
       ),
   );
   }
+
+}

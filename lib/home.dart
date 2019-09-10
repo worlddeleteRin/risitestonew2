@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:Shrine/supplemental/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -19,41 +20,31 @@ import 'backdrop.dart';
 import 'expanding_bottom_sheet.dart';
 import 'model/app_state_model.dart';
 import 'model/product.dart';
-import 'supplemental/asymmetric_view.dart';
+import 'app.dart';
+// import 'package:woocommerce_api/woocommerce_api.dart';
+import 'woocommerce_api.dart';
+
+import 'supplemental/product_card.dart';
+
 
 class ProductPage extends StatelessWidget {
 
+  List s;
+  List allproducts;
 
-  final Category category;
 
-  ProductPage(this.category);
+  ProductPage(this.s, this.allproducts);
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(
         builder: (BuildContext context, Widget child, AppStateModel model) {
-      model.setCategory(category);
-      return AsymmetricView(
-        products: model.getProducts(),
-      );
+      //model.setCategory(category);
+      model.loadProductswc(allproducts);
+      return ProductCard(s);
+      
     });
   }
 }
 
-class HomePage extends StatelessWidget {
-  final ExpandingBottomSheet expandingBottomSheet;
-  final Backdrop backdrop;
 
-  const HomePage({Key key, this.expandingBottomSheet, this.backdrop})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        backdrop,
-        Align(child: expandingBottomSheet, alignment: Alignment.bottomRight)
-      ],
-    );
-  }
-}

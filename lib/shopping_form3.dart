@@ -1,3 +1,4 @@
+import 'package:Shrine/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,13 +7,17 @@ import 'dart:io';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:Shrine/app.dart';
 import 'package:wave_progress_widget/wave_progress_widget.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+// import 'package:woocommerce_api/woocommerce_api.dart';
+import 'woocommerce_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyShopping extends StatefulWidget {
+  List allproducts;
+  MyShopping(this.allproducts);
   @override
   MyShoppingState createState() => MyShoppingState();
 }
@@ -79,7 +84,7 @@ bool isSwitched4 = false;
 
   var _progress = 50.0;
 
- var phonecontroller = new MaskedTextController(mask: '+7(000)-000-00-00');
+ var phonecontroller = new MaskedTextController(mask: '70000000000');
 
 
   @override
@@ -264,7 +269,8 @@ bool isSwitched4 = false;
                 if (this._internet_result == true) {
                 waytopick = checkWayPick();
                 waytopay = checkWayPay();
-                mailIt(model, name, phone, address, _deliveryResult, _payResult);
+                mailIt2(model, name, phone, address, _deliveryResult, _payResult);
+                //mailIt(model, name, phone, address, _deliveryResult, _payResult);
                 _ackAlert(context, model);
                 }
                  else {
@@ -324,7 +330,7 @@ Widget FirstForm() {
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         icon: Icon(Icons.phone, color: Colors.green),
-                        hintText: "+7 (xxx)-xxx-xx-xx",
+                        hintText: "7 (xxx)-xxx-xx-xx",
                        labelText: "Номер телефона",
                       ),
                       validator: (value) {
@@ -458,6 +464,103 @@ mailIt(AppStateModel model, name, phone, address, waytopick, waytopay) async {
   // close the connection
   await connection.close();
   }
+
+  mailIt2(AppStateModel model, name, phone, address, waytopick, waytopay) async {
+
+    /// Initialize the API
+    WooCommerceAPI wc_api = new WooCommerceAPI(
+        "http://worlddelete.ru/risitesto",
+        "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
+        "cs_e84f4bb389cccf2260b0f864fdda145606c3c0f4"
+    );
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+
+      List productsCart = [];
+      model.productsInCart.keys
+        .map(
+          (id) {
+      productsCart.add({"product_id" : id, "quantity" : model.productsInCart[widget.allproducts.firstWhere((p) => p['id'] == id)['id']]});
+          }
+        ).toList();
+      
+    var response = await wc_api.postAsync(
+      // "customers",
+      // {
+      //   "email": 'naken505@gmail.com',
+      //   "password": "123",
+      //   "billing": {
+      //     "first_name": "$name",
+      //   }
+      // },
+      "orders",
+      {
+  "customer_id": prefs.getInt('id'),
+  "payment_method": "RUB",
+  "payment_method_title": "$waytopay",
+  "status": "processing",
+  // "set_paid": true,
+  "billing": {
+    "first_name": "$name",
+    //"last_name": "505",
+    "address_1": "$waytopay",
+    // "address_2": "$waytopay",
+    //"city": "San Francisco",
+    //"state": "CA",
+    //"postcode": "94103",
+    "country": "Страна: Россия",
+    //"email": "john.doe@example.com",
+    "phone": "$phone"
+  },
+  "shipping": {
+    // "first_name": "",
+    // "last_name": "Doe",
+    "address_1": "$address, ",
+    "address_2": "$waytopick",
+    // "city": "San Francisco",
+    // "state": "CA",
+    // "postcode": "94103",
+    // "country": "RU"
+  },
+  
+  "line_items": productsCart,
+      },
+    );
+    print(response); // JSON Object with response
+
+
+  //   var createCustomer = await wc_api.postAsync(
+  //   "customers",
+  //     {
+  //       "email": "noemail@examle.com",
+  //       "first_name": "$name",
+  //       "username": "$phone",
+  //       "billing": {
+  //         "first_name": "$name",
+  //         "country": "Russia",
+  //         "phone": "$phone",
+  //       },
+  //       "shipping": {
+  //         "first_name": "$name",
+  //         "addresss_1": "$address",
+  //         "country": "Russia"
+  //       }
+  //     },
+  // );
+  // print(createCustomer);
+  
+  } catch (e) {
+    print(e);
+  }
+
+  
+
+  }
+
+
+
   Future<void> _ackAlert(BuildContext context, model) {
   return showDialog<void>(
     context: context,

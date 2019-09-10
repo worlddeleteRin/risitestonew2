@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:Shrine/model/app_state_model.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -25,6 +26,8 @@ import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// imports for login page 
+import 'login_page/login_main.dart';
 
 
 void main() {
@@ -32,7 +35,7 @@ void main() {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
       
 AppStateModel model = AppStateModel();
-model.loadProducts();
+
   runApp(
     ScopedModel<AppStateModel>(
       model: model,
@@ -42,6 +45,8 @@ model.loadProducts();
 }
 
 class MyApp extends StatelessWidget {
+
+ 
 @override
 Widget build(BuildContext context) {
     return new MaterialApp(
@@ -67,6 +72,7 @@ model.loadProducts();
 
 class App extends StatefulWidget {
 
+
 @override
 AppState createState() => new AppState();
 
@@ -74,13 +80,22 @@ AppState createState() => new AppState();
 
 class AppState extends State<App> {
 
+
   Future checkFirstSeen() async {
+
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
 
     if (_seen) {
+    // print(prefs.getInt('id'));
+    if (prefs.getInt('id') != null) {
     Navigator.of(context).pushReplacement(
         new MaterialPageRoute(builder: (context) => new ShrineApp()));
+    } else {
+      Navigator.of(context).pushReplacement(
+        new MaterialPageRoute(builder: (context) => new LoginPage()));
+    }
     } else {
     prefs.setBool('seen', true);
     Navigator.of(context).pushReplacement(
@@ -179,7 +194,7 @@ class IntroScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ShrineApp(),
+                    builder: (context) => LoginPage(),
                   ),
                 );
               },

@@ -33,6 +33,7 @@ class Product {
     @required this.name,
     @required this.price,
     @required this.stockprice,
+    @required this.isnew,
   })  : assert(category != null),
         assert(id != null),
         assert(isFeatured != null),
@@ -48,6 +49,7 @@ class Product {
   final int price;
   final String description;
   final int stockprice;
+  final bool isnew;
 
   String get assetName => 'assets/$id-0.png';
   //String get assetPackage => 'shrine_images';

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import 'package:groovin_material_icons/groovin_material_icons.dart';
-import 'package:Shrine/home.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -26,9 +25,17 @@ import 'shopping_form3.dart';
 import 'mail_shopping.dart';
 import 'package:stepper_touch/stepper_touch.dart';
 
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+
+
 const _leftColumnWidth = 60.0;
 
 class ShoppingCartPage extends StatefulWidget {
+
+  final List allproducts;
+  const ShoppingCartPage(this.allproducts);
+
   @override
   _ShoppingCartPageState createState() => _ShoppingCartPageState();
 }
@@ -39,22 +46,43 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
   List<Widget> _createShoppingCartRows(AppStateModel model) {
     return model.productsInCart.keys
         .map(
-          (id) => ShoppingCartRow(
-                product: model.getProductById(id),
-                quantity: model.productsInCart[id],
-                onPressed: () {
-                  model.removeItemFromCart(id);
-                },
-                addquantity: () {
-                 model.addProductToCart(id);
-                },
-                removequantity: () {
-                  model.removeItemFromCart(id);
-                },
-                removeitems: () {
-                  model.removeItemsFromCart(id);
-                },
-              ),
+          (id) => 
+
+          ShoppingCartRow(
+            id,
+            widget.allproducts,
+            quantity: model.productsInCart[widget.allproducts.firstWhere((p) => p['id'] == id)['id']],
+            removeitems: () {
+                model.removeItemsFromCart(widget.allproducts.firstWhere((p) => p['id'] == id)['id']);
+            },
+            addquantity: () {
+              model.addProductToCart(widget.allproducts.firstWhere((p) => p['id'] == id)['id']);
+            },
+            removequantity: () {
+              model.removeItemFromCart(widget.allproducts.firstWhere((p) => p['id'] == id)['id']);
+            },
+          )
+          // ShoppingRow(
+          //   id,
+          //   widget.allproducts,
+          //   onDelete: () {
+          //     setState(() {
+          //       model.removeProductsInCart(widget.allproducts.firstWhere((p) => p['id'] == id)['id']);
+          //     });
+          //   },
+          // )
+          // Row(
+          //   children: <Widget>[
+          //     Text('${widget.allproducts.firstWhere((p) => p['id'] == id)['name']}'),
+          //     RaisedButton(
+          //       child: Text('Удалить'),
+          //       onPressed: () {
+          //         model.removeProductsInCart(widget.allproducts.firstWhere(((p) => p['id'] == id))['id']);
+          //       },
+          //     )
+          //   ],
+          // ),
+          
         )
         .toList();
   }
@@ -64,6 +92,11 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
     final localTheme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black87,
+        title: Text('Корзина'),
+        centerTitle: true,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
@@ -79,11 +112,13 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                             width: _leftColumnWidth,
                             child: IconButton(
                                 icon: const Icon(Icons.keyboard_arrow_down),
-                                onPressed: () =>
-                                    ExpandingBottomSheet.of(context).close()),
+                                onPressed: () {
+                                    //ExpandingBottomSheet.of(context).close()),
+                                }
+                          ),
                           ),
                           Text(
-                            'Корзина',
+                            'Ваши покупки',
                             style: localTheme.textTheme.subhead
                                 .copyWith(fontWeight: FontWeight.w600),
                           ),
@@ -108,8 +143,9 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                       children: <Widget>[
                         MaterialButton(
                           onPressed: () {
+                            //showAlertDialog();
                             Navigator.push(context, 
-                        MaterialPageRoute(builder: (context) => MyShopping()),
+                        MaterialPageRoute(builder: (context) => MyShopping(widget.allproducts)),
                         );
                         //model.clearCart();
                         //ExpandingBottomSheet.of(context).close();
@@ -126,7 +162,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                           )
-                          )
+                          ),
                         ),
                       ],
                     )
@@ -186,6 +222,36 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
       ),
     );
   }
+
+  showAlertDialog() {
+    return Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "RFLUTTER ALERT",
+      desc: "Flutter is more awesome with RFlutter Alert.",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "FLAT",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          color: Color.fromRGBO(0, 179, 134, 1.0),
+        ),
+        DialogButton(
+          child: Text(
+            "GRADIENT",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          gradient: LinearGradient(colors: [
+            Color.fromRGBO(116, 116, 191, 1.0),
+            Color.fromRGBO(52, 138, 199, 1.0)
+          ]),
+        )
+      ],
+    ).show();
+  }
 }
 
 class ShoppingCartSummary extends StatelessWidget {
@@ -198,8 +264,7 @@ class ShoppingCartSummary extends StatelessWidget {
     final smallAmountStyle =
         Theme.of(context).textTheme.body1.copyWith(color: kShrineBrown600);
     final largeAmountStyle = Theme.of(context).textTheme.display1;
-    final formatter = NumberFormat.simpleCurrency(
-        decimalDigits: 2, locale: Localizations.localeOf(context).toString());
+  
 
     return Row(
       children: [
@@ -215,7 +280,7 @@ class ShoppingCartSummary extends StatelessWidget {
                     MaterialButton(
                       onPressed: () {
                         model.clearCart();
-                        ExpandingBottomSheet.of(context).close();
+                        //ExpandingBottomSheet.of(context).close();
                       },
                       color: Colors.red,
                       shape: new RoundedRectangleBorder(
@@ -293,10 +358,11 @@ class ShoppingCartSummary extends StatelessWidget {
 }
 
 class ShoppingCartRow extends StatelessWidget {
-  ShoppingCartRow(
-      {@required this.product, @required this.quantity, this.onPressed, this.addquantity, this.removequantity, this.removeitems,});
+  ShoppingCartRow(this.id, this.allproducts,
+      {@required this.quantity, this.onPressed, this.addquantity, this.removequantity, this.removeitems,});
 
-  final Product product;
+  int id;
+  List allproducts;
   int quantity;
   final VoidCallback onPressed;
   final VoidCallback addquantity;
@@ -306,15 +372,14 @@ class ShoppingCartRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    var currentProduct = allproducts.firstWhere((p) => p['id'] == id);
+
     AppStateModel model;
-    final formatter = NumberFormat.simpleCurrency(
-        decimalDigits: 0, locale: Localizations.localeOf(context).toString());
     final localTheme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
-        key: ValueKey(product.id),
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -337,9 +402,7 @@ class ShoppingCartRow extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        product.assetName,
-                        //package: product.assetPackage,
+                      Image.network(currentProduct["images"][0]["src"],
                         fit: BoxFit.cover,
                         width: 75.0,
                         height: 75.0,
@@ -350,9 +413,7 @@ class ShoppingCartRow extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              product.name,
-                              style: localTheme.textTheme.subhead
-                                  .copyWith(fontWeight: FontWeight.w600),
+                             '${currentProduct['name']}',
                             ),
                             Row(
                               children: [
@@ -381,7 +442,6 @@ class ShoppingCartRow extends StatelessWidget {
                                   child: FlatButton(
                                     onPressed: () {
                                       addquantity();
-                                      print('$quantity');
                                     },
                                     child: Icon(Icons.keyboard_arrow_right,
                                     size: 40,
@@ -390,7 +450,8 @@ class ShoppingCartRow extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  product.stockprice == null? 'x ${product.price} руб.': 'x ${product.stockprice}',
+                                  //'product price',
+                                  currentProduct['price'] == null? 'x ${currentProduct['price']} руб.': 'x ${currentProduct['price']}',
                                   ),
                               ],
                             ),
@@ -417,5 +478,3 @@ class ShoppingCartRow extends StatelessWidget {
     );
   }
 }
-
-
