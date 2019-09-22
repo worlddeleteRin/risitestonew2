@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:intl/intl.dart';
@@ -29,6 +30,7 @@ import 'dart:async';
 
 
 
+
 class ProductCard extends StatelessWidget {
 
   ProductCard(this.product);
@@ -41,7 +43,31 @@ class ProductCard extends StatelessWidget {
   @override 
   Widget _shoppingButton(BuildContext context, index) {
     return ScopedModelDescendant<AppStateModel>(
-      builder: (context, child, model) => MaterialButton(
+      builder: (context, child, model) {
+        
+        return Row(children: <Widget>[
+
+      Container( 
+      padding: EdgeInsets.only(left: 40, right: 140, bottom: 10),
+      child: Row(children: <Widget>[
+
+      Text(
+        '${this.product[index]['price']}',
+        style: TextStyle(
+          fontSize: 25
+        )
+      ),
+      Text(
+        ' руб.',
+        style: TextStyle(
+          fontSize: 11,
+        ),
+      ),
+      ],)
+      
+      ),  
+
+      MaterialButton(
         materialTapTargetSize: MaterialTapTargetSize.padded,
         elevation: 10,
         splashColor: Colors.green,
@@ -52,6 +78,14 @@ class ProductCard extends StatelessWidget {
           //productsInCart.add(product[index]);
           //print(productsInCart);
           model.addProductToCart(this.product[index]['id']);
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              elevation: 1,
+              content: Text('${this.product[index]['name']} добавлен(а) в корзину'),
+              duration: Duration(seconds: 1),
+            )
+          );
           //print(this.product[index]);
           /*Flushbar(
             aroundPadding: EdgeInsets.all(10),
@@ -73,7 +107,10 @@ class ProductCard extends StatelessWidget {
             color: Colors.white,
           )
         ),
-      )
+        
+      ),
+      ],);
+      }
     );
   }
 
@@ -110,7 +147,8 @@ class ProductCard extends StatelessWidget {
       child: */
 
   
-      return ListView.builder(
+      return Scaffold(
+      body: ListView.builder(
             itemCount: product.length,
             itemBuilder: (BuildContext context,index){
               
@@ -194,16 +232,16 @@ class ProductCard extends StatelessWidget {
                       product == null ? '' : product[index]["regular_price"] == null ? '${product[index]["sale_price"]}' : '${product[index]["regular_price"]}',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 15,
+                        fontSize: 14,
                         fontFamily: "arial",
                         color: Colors.white,
-                      )
+                      ),
           ),
           Text(
             product == null ? '' : 'руб.',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 8,
+                        fontSize: 9,
                         fontFamily: "arial",
                         color: Colors.white,
                       )
@@ -215,15 +253,16 @@ class ProductCard extends StatelessWidget {
             );
 
       return Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             borderOnForeground: true,
             elevation: 20,
             semanticContainer: true,
             shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
+                    borderRadius: BorderRadius.circular(15)),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Row( 
+                Column( 
             //mainAxisSize: MainAxisSize.min,
             verticalDirection: VerticalDirection.down,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -237,9 +276,15 @@ class ProductCard extends StatelessWidget {
           
               Container(
                 padding: EdgeInsets.only(top: 1),
-                width: 130,
-                height: 130,
-              child: Image.network(product[index]["images"][0]["src"]),
+                width: 200,
+                height: 200,
+              child: CachedNetworkImage(
+                    imageUrl: product[index]["images"][0]["src"],
+                    placeholder: (context, url) => new CircularProgressIndicator(
+                      backgroundColor: Colors.green,
+                      strokeWidth: 3,
+                    ),
+                    ),
               /*child: AspectRatio(
                 aspectRatio: imageAspectRatio,
                 child: imageWidget,
@@ -248,18 +293,18 @@ class ProductCard extends StatelessWidget {
           ),
 
 
-              Positioned(
-              child: product[index]["sale_price"].isEmpty == true ? priceWidget : stockpriceWidget, 
-            top: -35,
-            right: 0,
-          ),
+          //     Positioned(
+          //     child: product[index]["sale_price"].isEmpty == true ? priceWidget : stockpriceWidget, 
+          //   top: -35,
+          //   right: 0,
+          // ),
               
             ],),
             Column(mainAxisSize: MainAxisSize.min,children: <Widget>[
           
               SizedBox(
                 //height:  .28 * MediaQuery.of(context).size.height,
-                width: .62 * MediaQuery.of(context).size.width,
+                // width: .62 * MediaQuery.of(context).size.width,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -279,7 +324,9 @@ class ProductCard extends StatelessWidget {
                       maxLines: 4,
                     ),
                     Container(padding: EdgeInsets.only(top: 5)),
-                    Text(
+                    Container(
+                    padding: EdgeInsets.only(left: 15, right: 15),
+                    child: Text(
                       product == null ? '' : removeAllHtmlTags(product[index]["description"]),
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -288,8 +335,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       softWrap: true,
                       overflow: TextOverflow.fade,
-
-                      
+                    ),
                     ),
                     SizedBox(height: 5.0),
                     /*Text(
@@ -369,6 +415,7 @@ class ProductCard extends StatelessWidget {
             ),
       );
             }
+      ),
       );
   }
 

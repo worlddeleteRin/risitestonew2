@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:groovin_material_icons/groovin_material_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,9 +34,7 @@ const _leftColumnWidth = 60.0;
 
 class ShoppingCartPage extends StatefulWidget {
 
-  final List allproducts;
-  const ShoppingCartPage(this.allproducts);
-
+  List allproducts;
   @override
   _ShoppingCartPageState createState() => _ShoppingCartPageState();
 }
@@ -102,6 +101,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
         child: Container(
           child: ScopedModelDescendant<AppStateModel>(
             builder: (context, child, model) {
+              widget.allproducts = model.availableProducts;
               return Stack(
                 children: [
                   ListView(
@@ -402,11 +402,14 @@ class ShoppingCartRow extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(currentProduct["images"][0]["src"],
-                        fit: BoxFit.cover,
-                        width: 75.0,
-                        height: 75.0,
-                      ),
+                      Container(
+                    height: 75.0,
+                    width: 75.0,
+                    child: CachedNetworkImage(
+                    imageUrl: currentProduct["images"][0]["src"],
+                    placeholder: (context, url) => new CircularProgressIndicator(),
+                    ),
+                  ),
                       const SizedBox(width: 16.0),
                       Expanded(
                         child: Column(

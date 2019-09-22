@@ -29,19 +29,17 @@ import 'supplemental/product_card.dart';
 
 class ProductPage extends StatelessWidget {
 
-  List s;
-  List allproducts;
+  String category;
 
-
-  ProductPage(this.s, this.allproducts);
+  ProductPage(this.category);
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(
         builder: (BuildContext context, Widget child, AppStateModel model) {
       //model.setCategory(category);
-      model.loadProductswc(allproducts);
-      return ProductCard(s);
+      List currentCategoryProducts = model.availableProducts.where((l) => l['categories'][0]['slug'] == "$category").toList();
+      return ProductCard(currentCategoryProducts);
       
     });
   }

@@ -21,6 +21,8 @@ import '../woocommerce_api.dart';
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 double _salesTaxRate = 0.06;
@@ -29,9 +31,28 @@ double _shippingCostPerItem = 7.0;
 class AppStateModel extends Model {
   // All the available products.
 
+
+  List _customer_orders = [];
+  get customer_orders => _customer_orders;
+  List _products_categories = [];
+  List get products_categories => _products_categories;
+  var _current_user_id;
+  get current_user_id => _current_user_id;
+  var _current_user_email;
+  get current_user_email => _current_user_email;
+
+  List _allproducts = [];
+
+  
+
+  List get allproducts => _allproducts;
+
   int _userId;
 
   int get userId => _userId;
+
+  List _customersList;
+  List get customersList => _customersList;
 
 
   List _availableProducts;
@@ -45,6 +66,22 @@ class AppStateModel extends Model {
   // The IDs and quantities of products currently in the cart.
   Map<int, int> _productsInCart = {};
   Map<int, int> get productsInCart => Map.from(_productsInCart);
+
+  void getprefs() async {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     _current_user_id = prefs.getInt('id');
+     if (_current_user_id != null) {
+       _current_user_email = _customersList.firstWhere((user) => user['id'] == _current_user_id)['email'];
+       WooCommerceAPI wc_api = new WooCommerceAPI(
+        "http://worlddelete.ru/risitesto",
+        "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
+        "cs_e84f4bb389cccf2260b0f864fdda145606c3c0f4"
+    );
+     _customer_orders = await wc_api.getAsync("orders?customer=$_current_user_id");
+     }
+     
+    
+  }
 
   loadProductswc(List products) {
     _availableProducts = products;
@@ -190,6 +227,10 @@ class AppStateModel extends Model {
 
   Future getProductswc() async {
 
+
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // _prefs_local = prefs;
+
     /// Initialize the API
     WooCommerceAPI wc_api = new WooCommerceAPI(
         "http://worlddelete.ru/risitesto",
@@ -198,8 +239,22 @@ class AppStateModel extends Model {
     );
     
     /// Get data using the endpoint
-    var p = await wc_api.getAsync("products");
-    return p;
+    var customers = await wc_api.getAsync("customers?per_page=100");
+    _customersList = customers;
+    
+    var products_cat = await wc_api.getAsync("products/categories?per_page=100");
+
+    _products_categories = products_cat;
+
+    // make another conclusion
+
+    var products = await wc_api.getAsync("products?per_page=100");
+    return _availableProducts = products;
+    
+  }
+
+  Future getCustomerOrders() async {
+
   }
 
 

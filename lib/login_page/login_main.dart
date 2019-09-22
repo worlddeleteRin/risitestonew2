@@ -319,6 +319,7 @@ checkConnectivity() async {
       await prefs.setInt('id', id);
       // print(prefs.getInt('id'));
       pr.hide();
+      model.getprefs();
 
       Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ShrineApp()));

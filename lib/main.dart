@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:Shrine/model/app_state_model.dart' as prefix0;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -52,7 +53,35 @@ Widget build(BuildContext context) {
     return new MaterialApp(
     debugShowCheckedModeBanner: false,
     color: Colors.blue,
-    home: App(),
+    home: ScopedModelDescendant<AppStateModel>(
+            builder: (context, child, model) {
+    return Scaffold(
+    body: FutureBuilder(
+        future: model.getProductswc(),
+        builder: (_, snapshot){
+          if(snapshot.data == null){
+            return Container(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Загрузка...'),
+                //     SpinKitDualRing(
+                //   color: Colors.black,
+                //   size: 50.0,
+                // ),
+                ],)
+              ),
+            );
+          }
+          print('lol6');
+          return App();
+        },
+      ),
+    );
+            },
+    ),
+
     );
 }
 }
@@ -81,8 +110,7 @@ AppState createState() => new AppState();
 class AppState extends State<App> {
 
 
-  Future checkFirstSeen() async {
-
+  Future checkFirstSeen() async {            
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
@@ -104,6 +132,7 @@ class AppState extends State<App> {
 }
   @override
 void initState() {
+    print('get it');
     super.initState();
     new Timer(new Duration(milliseconds: 200), () {
     checkFirstSeen();
@@ -112,10 +141,15 @@ void initState() {
 
 @override
 Widget build(BuildContext context) {
-    return new Scaffold(
-    body: new Center(
-        child: new Text('Загрузка...'),
-    ),
+    return ScopedModelDescendant<AppStateModel>(
+            builder: (context, child, model)  { 
+              model.getprefs();
+    return Scaffold(
+      body: Center(
+        child: Text('Загрузка')
+      ), 
+    );
+            }
     );
 }
 }
@@ -184,9 +218,9 @@ class IntroScreen extends StatelessWidget {
       return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'IntroViews Flutter', //title of app
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ), //ThemeData
+      // theme: ThemeData(
+      //   primarySwatch: Colors.blue,
+      // ), //ThemeData
       home: Builder(
         builder: (context) => IntroViewsFlutter(
               pages,
