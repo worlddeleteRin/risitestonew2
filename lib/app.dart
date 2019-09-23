@@ -56,7 +56,7 @@ class ShrineApp extends StatefulWidget {
 class _ShrineAppState extends State<ShrineApp>
     with SingleTickerProviderStateMixin {
 
-  int _selectedIndex = 1;
+  int _selectedIndex = 2;
 static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
 
@@ -96,11 +96,13 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
 
   widgetOptions(int page) {
     switch (page) {
-      case 0: 
-      return StockPage();
+      case 0:
+      return UserAccount();
       case 1: 
+      return StockPage();
+      case 2: 
       return ProductMainPage();
-      case 2:  
+      case 3:  
       return ShoppingCartPage(); 
     }
   }
@@ -140,6 +142,10 @@ void _onItemTapped(int index) {
         
         bottomNavigationBar: BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle),
+          title: Text('Профиль'),
+        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.local_offer),
           title: Text('Акции'),
@@ -256,6 +262,32 @@ Widget MainDrawer()  {
                 //Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ShrineApp()));
+                //Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Бонусы',
+                ),
+                leading: Icon(Icons.star, color: Colors.black),
+                trailing: Icon(Icons.keyboard_arrow_right, color: Colors.red),
+              onTap: () {
+                //Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => BonusPageWrapper()));
+                //Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Акции',
+                ),
+                leading: Icon(Icons.local_offer, color: Colors.black),
+                trailing: Icon(Icons.keyboard_arrow_right, color: Colors.red),
+              onTap: () {
+                //Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => StockPage()));
                 //Navigator.pop(context);
               },
             ),

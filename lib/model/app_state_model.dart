@@ -51,11 +51,11 @@ class AppStateModel extends Model {
 
   int get userId => _userId;
 
-  List _customersList;
+  List _customersList = [];
   List get customersList => _customersList;
 
 
-  List _availableProducts;
+  List _availableProducts = [];
 
   List _productsInCartwc = [];
 
@@ -239,17 +239,48 @@ class AppStateModel extends Model {
     );
     
     /// Get data using the endpoint
-    var customers = await wc_api.getAsync("customers?per_page=100");
-    _customersList = customers;
+  
     
-    var products_cat = await wc_api.getAsync("products/categories?per_page=100");
+    var customers_page = 1;
 
-    _products_categories = products_cat;
+        while (customers_page != null) {
+        List customers = await wc_api.getAsync("customers?per_page=100&page=${customers_page}");
+        if (customers.length > 0) {
+            _customersList += customers;
+            customers_page++;
+        } else {
+            customers_page = null; // last page
+        }
+    }
+
+
+    var cat_page = 1;
+
+        while (cat_page != null) {
+        List products_cat = await wc_api.getAsync("products/categories?per_page=100&page=${cat_page}");
+        if (products_cat.length > 0) {
+            _products_categories += products_cat;
+            cat_page++;
+        } else {
+            cat_page = null; // last page
+        }
+    }
 
     // make another conclusion
+     var products_page = 1;
 
-    var products = await wc_api.getAsync("products?per_page=100");
-    return _availableProducts = products;
+        while (products_page != null) {
+        List products = await wc_api.getAsync("products?per_page=100&page=${products_page}");
+        if (products.length > 0) {
+            _availableProducts += products;
+            products_page++;
+        } else {
+            products_page = null; // last page
+        }
+    }
+
+    
+    return _availableProducts;
     
   }
 

@@ -78,12 +78,27 @@ Widget stockPage(BuildContext context, model) {
                 );
     },
       child: Container(
+        child: InkWell(
+          splashColor: Colors.green,
+          onTap: (){
+            Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StockPageItem(
+                      name: products_stocks[index]['name'],
+                      description: products_stocks[index]['description'],
+                      image: products_stocks[index]["images"][0]["src"],
+                    ),
+                  ),
+                );
+          },
       child: AwesomeListItem(
                     title: products_stocks[index]["name"],
                     content: description,
                     color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
                     image: image,
                     ),
+      ),
       ),
       );
       // return bodyWidget(context, index, Colors.red, "${widget.products_stocks[index]['name']}",
