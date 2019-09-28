@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import 'app.dart';
 import 'model/app_state_model.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class UserAccount extends StatefulWidget {
 
@@ -68,17 +70,76 @@ class OrdersPage extends StatefulWidget {
 
   @override
   _OrdersPageState createState() => new _OrdersPageState();
+
+  void initState() {
+    print('lol');
+  }
 }
 
 class _OrdersPageState extends State<OrdersPage> {
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
    var _status_color;
 
 Widget build(BuildContext context) {
+  var pr = new ProgressDialog(context,ProgressDialogType.Normal);
+  pr.setMessage('Обновление...');
   return ScopedModelDescendant<AppStateModel>(
     builder: (context, child, model) {
+
       List orders = model.customer_orders;
-      return Container(
+      if (orders.isEmpty) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          Icon(
+            Icons.remove_shopping_cart,
+            size: 100,
+            color: Colors.grey,
+          ),
+          Container(padding: EdgeInsets.only(top: 10)),
+          Text(
+            'Список заказов пуст',
+            style: TextStyle(
+              // color: Colors.grey,
+            ),
+          ),
+          Container(padding: EdgeInsets.only(top: 20)),
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ShrineApp(),
+              ));
+            },
+          color: Colors.orange,
+          child: Text(
+          'Сделать заказ', 
+          style: TextStyle(
+            color: Colors.white,
+          )
+          ), 
+          ),
+        ],);
+      } else {
+        return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          onPressed: () async {
+            pr.show();
+            await model.updateCustomerOrders();
+            setState(() {
+              orders = model.customer_orders;
+            });
+            pr.hide();
+          },
+          child: Icon(Icons.refresh),
+        ),
+        body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
           // Where the linear gradient begins and ends
@@ -195,10 +256,13 @@ Widget build(BuildContext context) {
               );
             }
      ),
+        ),
   );
+      }
 }
  ); 
 }
+
 
 }
 
@@ -319,11 +383,34 @@ class BonusPage extends StatefulWidget {
 class _BonusPageState extends State<BonusPage> {
 
   Widget build(BuildContext context) {
+    var pr = new ProgressDialog(context,ProgressDialogType.Normal);
+    pr.setMessage('Обновление...');
     return ScopedModelDescendant<AppStateModel>(
       builder: (context, child, model) {
         List meta = model.customersList.firstWhere((c) => c['id'] == model.current_user_id)['meta_data'];
-        var meta_bonus = meta.firstWhere((b) => b['key'] == 'hp_woo_rewards_points')['value'];
+        String meta_bonus;
+        try {
+        if (!(meta.firstWhere((b) => b['key'] == 'hp_woo_rewards_points')['value'].isEmpty)) {
+          meta_bonus = meta.firstWhere((b) => b['key'] == 'hp_woo_rewards_points')['value'];
+        }
+      } catch(e) {
+        print(e);
+      }
+        if (!(meta_bonus == null)) {
         return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              pr.show();
+              await model.updateCustomers();
+              setState(() {
+                meta = model.customersList.firstWhere((c) => c['id'] == model.current_user_id)['meta_data'];
+                meta_bonus = meta.firstWhere((b) => b['key'] == 'hp_woo_rewards_points')['value'];
+              });
+              pr.hide();
+            },
+            child: Icon(Icons.refresh),
+            backgroundColor: Colors.red,
+          ),
          body: Container(
             margin: EdgeInsets.only(left: 20, right: 20, top: 100),
           child: Column(children: <Widget>[
@@ -352,7 +439,7 @@ class _BonusPageState extends State<BonusPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('$meta_bonus',
+                Text('$meta_bonus', 
                 style: TextStyle(
                   fontSize: 40,
                   color: Colors.green[400],
@@ -395,13 +482,49 @@ class _BonusPageState extends State<BonusPage> {
               )
             ),
             onPressed: () {
-
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => BonusDetailPage()
+              ));
             },
           ),
           ),
           ],)
           ),
         );
+        } else {
+          return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          Icon(
+            Icons.sms_failed,
+            size: 100,
+            color: Colors.grey,
+          ),
+          Container(padding: EdgeInsets.only(top: 10)),
+          Text(
+            'У вас еще нет бонусов',
+            style: TextStyle(
+              // color: Colors.grey,
+            ),
+          ),
+          Container(padding: EdgeInsets.only(top: 20)),
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ShrineApp(),
+              ));
+            },
+          color: Colors.orange,
+          child: Text(
+          'Сделать заказ', 
+          style: TextStyle(
+            color: Colors.white,
+          )
+          ), 
+          ),
+        ],);
+        }
       } 
       );
   }
@@ -416,6 +539,22 @@ class BonusPageWrapper extends StatelessWidget {
         title: Text('Бонусы'),
       ),
       body: BonusPage()
+    );
+  }
+}
+
+class BonusDetailPage extends StatelessWidget {
+  @override 
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Бонусы'),
+      ),
+      body: Container(
+        child: Text(
+          'Информация о бонусах',
+        ) 
+      )
     );
   }
 }

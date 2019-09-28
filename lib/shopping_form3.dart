@@ -270,6 +270,7 @@ bool isSwitched4 = false;
                 waytopick = checkWayPick();
                 waytopay = checkWayPay();
                 mailIt2(model, name, phone, address, _deliveryResult, _payResult);
+                model.updateCustomerOrders();
                 //mailIt(model, name, phone, address, _deliveryResult, _payResult);
                 _ackAlert(context, model);
                 }

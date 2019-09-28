@@ -21,7 +21,7 @@ dependencies:
   rflutter_alert: ^1.0.3
   http: ^0.12.0+2
   wordpress_api: ^0.1.2+5
-  flutter_spinkit: "^2.1.0"
+  flutter_spinkit: "^4.0.0"
   flutter_wordpress: ^0.1.4
   progress_dialog: ^1.1.0+1
   cached_network_image: ^1.1.1

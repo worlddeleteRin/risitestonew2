@@ -38,8 +38,8 @@ class AppStateModel extends Model {
   List get products_categories => _products_categories;
   var _current_user_id;
   get current_user_id => _current_user_id;
-  var _current_user_email;
-  get current_user_email => _current_user_email;
+  var _current_user_username;
+  get current_user_username => _current_user_username;
 
   List _allproducts = [];
 
@@ -71,7 +71,7 @@ class AppStateModel extends Model {
      SharedPreferences prefs = await SharedPreferences.getInstance();
      _current_user_id = prefs.getInt('id');
      if (_current_user_id != null) {
-       _current_user_email = _customersList.firstWhere((user) => user['id'] == _current_user_id)['email'];
+       _current_user_username = _customersList.firstWhere((user) => user['id'] == _current_user_id)['username'];
        WooCommerceAPI wc_api = new WooCommerceAPI(
         "http://worlddelete.ru/risitesto",
         "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
@@ -284,8 +284,47 @@ class AppStateModel extends Model {
     
   }
 
-  Future getCustomerOrders() async {
+  Future updateCustomers() async {
 
+    _customersList = [];
+
+    WooCommerceAPI wc_api = new WooCommerceAPI(
+        "http://worlddelete.ru/risitesto",
+        "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
+        "cs_e84f4bb389cccf2260b0f864fdda145606c3c0f4"
+    );
+    var customers_page = 1;
+
+        while (customers_page != null) {
+        List customers = await wc_api.getAsync("customers?per_page=100&page=${customers_page}");
+        if (customers.length > 0) {
+            _customersList += customers;
+            customers_page++;
+        } else {
+            customers_page = null; // last page
+        }
+    }
+    return _customersList;
+  }
+
+  Future updateOrders() async {
+    WooCommerceAPI wc_api = new WooCommerceAPI(
+        "http://worlddelete.ru/risitesto",
+        "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
+        "cs_e84f4bb389cccf2260b0f864fdda145606c3c0f4"
+    );
+  }
+
+  Future updateCustomerOrders() async {  
+    
+    WooCommerceAPI wc_api = new WooCommerceAPI(
+        "http://worlddelete.ru/risitesto",
+        "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
+        "cs_e84f4bb389cccf2260b0f864fdda145606c3c0f4"
+    );
+    // _customer_orders = [];
+     _customer_orders = await wc_api.getAsync("orders?customer=$_current_user_id");
+     print(_customer_orders);
   }
 
 

@@ -77,8 +77,8 @@ final _formKey = GlobalKey<FormState>();
             FirstForm(),
             // SizedBox(height: 24.0),
             LoginButton(pr, model),
-            CreateAccountButton(pr, model),
-            forgotLabel
+            // CreateAccountButton(pr, model),
+            // forgotLabel
           ],
         ),
       ),
@@ -100,7 +100,7 @@ Widget CreateAccountButton(pr, model) {
            if (_internet_result == false) {
              _noInternetConnection(context);
            } else {
-          registerUser(pr, model);
+          registerUser(model);
            }
           
           }
@@ -126,7 +126,7 @@ Widget LoginButton(pr, model) {
           if (_internet_result == false) {
             _noInternetConnection(context);
           } else {
-            signInUser(pr, model);
+            signInUser(model);
           }
           }
           // registerUser();
@@ -151,25 +151,25 @@ Widget LoginButton(pr, model) {
           children: <Widget>[  
             Container(             
                         child: Column(children: <Widget>[
-      TextFormField(
-      keyboardType: TextInputType.emailAddress,
-                                  //expands: true,
-                                  //enableInteractiveSelection: true,
-                                  cursorColor: Colors.green,
-                                  autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: "YourEmail@gmail.com",
-                        labelText: "Ваша Почта",
-                      ),                       
-                      validator: (value) {
-                        if(value.isEmpty) {
-                          return 'Заполните поле почты';
-                        }
-                        else {
-                          this.email_field = value;
-                        }
-                      },
-                    ),
+      // TextFormField(
+      // keyboardType: TextInputType.emailAddress,
+      //                             //expands: true,
+      //                             //enableInteractiveSelection: true,
+      //                             cursorColor: Colors.green,
+      //                             autofocus: false,
+      //                 decoration: InputDecoration(
+      //                   hintText: "YourEmail@gmail.com",
+      //                   labelText: "Ваша Почта",
+      //                 ),                       
+      //                 validator: (value) {
+      //                   if(value.isEmpty) {
+      //                     return 'Заполните поле почты';
+      //                   }
+      //                   else {
+      //                     this.email_field = value;
+      //                   }
+      //                 },
+      //               ),
                                 TextFormField(
                                   // obscureText: true,
                                   //expands: true,
@@ -177,8 +177,8 @@ Widget LoginButton(pr, model) {
                                   cursorColor: Colors.green,
                                   autofocus: false,
                       decoration: InputDecoration(
-                        hintText: "Имя пользователя",
-                        labelText: "Имя пользователя (Пароль)",
+                        hintText: "+7978xxxxxxx",
+                        labelText: "Ваш номер телефона",
                       ),                       
                       validator: (value) {
                         if(value.isEmpty) {
@@ -250,9 +250,9 @@ checkConnectivity() async {
 }
 }
 
-  registerUser(pr, model) async {
+  registerUser(model) async {
     // show loading 
-    pr.show();
+
     /// Initialize the API
     WooCommerceAPI wc_api = new WooCommerceAPI(
         "http://worlddelete.ru/risitesto",
@@ -266,13 +266,13 @@ checkConnectivity() async {
      var response = await wc_api.postAsync(
       "customers",
       {
-        "email": '$email_field',
+        "email": '${password_field}risitesto@gmail.com',
         "password": "$password_field",
         "username": "$password_field",
       },
      );
 
-    pr.hide();
+
     print(response);
 
     var status_code = 200;
@@ -283,58 +283,65 @@ checkConnectivity() async {
     }  
 
     } catch(e) {
-      pr.hide();
+
       print('все норм');
-      signInUser(pr, model);
+      // signInUser(pr, model);
       // Navigator.of(context).push(MaterialPageRoute(
       // builder: (context) => ShrineApp()));
       // print(e);
     }
-    pr.hide();
 
   }
 
-  signInUser(pr, model) async {
-    pr.show();
+  signInUser(model) async {
+    // pr.show();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    WooCommerceAPI wc_api = new WooCommerceAPI(
-        "http://worlddelete.ru/risitesto",
-        "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
-        "cs_e84f4bb389cccf2260b0f864fdda145606c3c0f4"
-    );
+    // WooCommerceAPI wc_api = new WooCommerceAPI(
+    //     "http://worlddelete.ru/risitesto",
+    //     "ck_07a643e5cb2fe5088d880bc6aba20db513cae159",
+    //     "cs_e84f4bb389cccf2260b0f864fdda145606c3c0f4"
+    // );
 
-    var customers = await wc_api.getAsync("customers?per_page=100");
-    List customersList = customers;
+    // var customers = await wc_api.getAsync("customers?per_page=100");
+    List customersList = await model.updateCustomers();
     // print(customersList.firstWhere((c) => c['email'] == email_field)['id']);
-    pr.hide();
+    // pr.hide();
     try {
   // print(customersList.firstWhere((c) => c['email'] == email_field));
 
     // if successful
-      int id = customersList.firstWhere((c) => c['email'] == email_field)['id'];
+      int id = customersList.firstWhere((c) => c['username'] == password_field)['id'];
+      
       if (customersList.firstWhere((c) => c['id'] == id)['username'] == password_field) {
       // print(id);
-      // model.setuserId(id);
+      model.setuserId(id);
       // print(model.userId);
       await prefs.setInt('id', id);
       // print(prefs.getInt('id'));
-      pr.hide();
+      // pr.hide();
       model.getprefs();
+      print(id);
+      print('пользователь залогинен');
 
       Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ShrineApp()));
-      pr.hide();
-      } else {
-        pr.hide();
+      
+      } 
+      else {
+        print('не вышло');
+        // pr.hide();
         _noSignIn(context);
       }
 
   } catch(e) {
-    pr.hide();
-    _noSignIn(context);
-    print(e);
+    // _noSignIn(context);
+    print(e.message);
+    if (e.message == 'No element') {
+      print('нет в базе');
+      await registerUser(model);
+    }
   }
-  pr.hide();
+
     
 }
 

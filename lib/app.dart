@@ -36,6 +36,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'user_account.dart';
 import 'products_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart';
 
 
 
@@ -217,7 +218,7 @@ Widget MainDrawer()  {
                     size: 100,
                     ),
                     Text(
-                      model.current_user_email == null ? 'Гость' : '${model.current_user_email}',
+                      model.current_user_username == null ? 'Гость' : '${model.current_user_username}',
                       style: TextStyle(
                         fontSize: 16,
                       )
@@ -297,8 +298,9 @@ Widget MainDrawer()  {
                 ),
                 leading: Icon(Icons.exit_to_app, color: Colors.black),
                 trailing: Icon(Icons.keyboard_arrow_right, color: Colors.red),
-              onTap: () {
-                // prefs.setInt('id', null);
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setInt('id', null);
                 //Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => LoginPage()));
