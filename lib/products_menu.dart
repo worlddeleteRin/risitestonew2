@@ -56,7 +56,7 @@ Widget build(BuildContext context) {
     ),
     body: Center(
       child: Container(
-        color: Colors.white60,
+        color: Colors.black12,
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemCount: categories.length,
@@ -75,7 +75,13 @@ Widget build(BuildContext context) {
                 );
               },
             child: Card(
-              elevation: 30,
+              // elevation: 30,
+  //             shape: StadiumBorder(
+  // side: BorderSide(
+  //   color: Colors.green,
+  //   width: 1.0,
+  // ),
+  //             ),
               // height: 200,
             //   decoration: BoxDecoration(
             //     shape: BoxShape.rectangle,

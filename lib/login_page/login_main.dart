@@ -15,6 +15,7 @@ import 'package:scoped_model/scoped_model.dart';
 import '../model/app_state_model.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 import 'dart:io';
 
@@ -29,8 +30,12 @@ AppStateModel model;
 
 class _LoginPageState extends State<LoginPage> {
 
-  bool _internet_result = false;
+  var phonecontroller = new MaskedTextController(mask: '70000000000');
 
+  bool _internet_result = false;
+  bool is_loading = false;
+
+String _loading_message = 'Вход в аккаунт...';
 
 String email_field;
 String password_field;
@@ -41,8 +46,6 @@ final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    var pr = new ProgressDialog(context,ProgressDialogType.Normal);
-    pr.setMessage('Обработка запроса...');
 
     final logo = Hero(
       tag: 'hero',
@@ -65,8 +68,29 @@ final _formKey = GlobalKey<FormState>();
     );
 
     return ScopedModelDescendant<AppStateModel>(
-      builder: (context, child, model) =>
-    Scaffold(
+      builder: (context, child, model) {
+    if(is_loading == true) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+      body: Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CircularProgressIndicator(),
+          Container(padding: EdgeInsets.only(top: 10)),
+          Text(
+            '$_loading_message',
+            style: TextStyle(
+              fontSize: 20,
+            )
+          ),
+        ],
+      ),
+      ),
+      );
+    } else {
+    return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: ListView(
@@ -74,46 +98,59 @@ final _formKey = GlobalKey<FormState>();
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[
             logo,
+            Container(
+            margin: EdgeInsets.only(top: 15, bottom: 10),
+            child: Text(
+              'Войдите с помощью номера',
+              softWrap: true,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            ),
             FirstForm(),
             // SizedBox(height: 24.0),
-            LoginButton(pr, model),
+            LoginButton(model),
             // CreateAccountButton(pr, model),
             // forgotLabel
           ],
         ),
       ),
-    ),
+    );
+    }
+      }
     );
   }
 
-Widget CreateAccountButton(pr, model) {
-  return Padding(
-      padding: EdgeInsets.symmetric(vertical: 1.0),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        onPressed: () async {
-          if (_formKey.currentState.validate()) {
+// Widget CreateAccountButton(pr, model) {
+//   return Padding(
+//       padding: EdgeInsets.symmetric(vertical: 1.0),
+//       child: RaisedButton(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(24),
+//         ),
+//         onPressed: () async {
+//           if (_formKey.currentState.validate()) {
           
-          await checkConnectivity();
-           if (_internet_result == false) {
-             _noInternetConnection(context);
-           } else {
-          registerUser(model);
-           }
+//           await checkConnectivity();
+//            if (_internet_result == false) {
+//              _noInternetConnection(context);
+//            } else {
+//           registerUser(model);
+//            }
           
-          }
-          // registerUser();
-          // Navigator.of(context).pushNamed(HomePage.tag);
-        },
-        padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
-        child: Text('Создать аккаунт', style: TextStyle(color: Colors.white)),
-      ),
-    );
-}
-Widget LoginButton(pr, model) {
+//           }
+//           // registerUser();
+//           // Navigator.of(context).pushNamed(HomePage.tag);
+//         },
+//         padding: EdgeInsets.all(12),
+//         color: Colors.lightBlueAccent,
+//         child: Text('Создать аккаунт', style: TextStyle(color: Colors.white)),
+//       ),
+//     );
+// }
+Widget LoginButton(model) {
   return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -126,7 +163,10 @@ Widget LoginButton(pr, model) {
           if (_internet_result == false) {
             _noInternetConnection(context);
           } else {
-            signInUser(model);
+            setState(() {
+              is_loading = true; 
+            });
+            await signInUser(model);
           }
           }
           // registerUser();
@@ -171,18 +211,16 @@ Widget LoginButton(pr, model) {
       //                 },
       //               ),
                                 TextFormField(
-                                  // obscureText: true,
-                                  //expands: true,
-                                  //enableInteractiveSelection: true,
-                                  cursorColor: Colors.green,
-                                  autofocus: false,
+                                controller: this.phonecontroller,
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
-                        hintText: "+7978xxxxxxx",
-                        labelText: "Ваш номер телефона",
-                      ),                       
+                        icon: Icon(Icons.phone, color: Colors.green),
+                        hintText: "7 (xxx)-xxx-xx-xx",
+                       labelText: "Номер телефона",
+                      ),                   
                       validator: (value) {
                         if(value.isEmpty) {
-                          return 'Введите имя пользователя';
+                          return 'Введите номер телефона';
                         }
                         else {
                           this.password_field = value;
@@ -251,6 +289,10 @@ checkConnectivity() async {
 }
 
   registerUser(model) async {
+    setState(() {
+      _loading_message = 'Создание аккаунта...';
+    });
+
     // show loading 
 
     /// Initialize the API
@@ -272,29 +314,36 @@ checkConnectivity() async {
       },
      );
 
-
     print(response);
+    // pr.hide();
 
     var status_code = 200;
     if (response['data']['status'] == 400) {
       status_code = 400;
       String error_message = response['message'];
-      _noRegistered(context, '$error_message');
+      // _noRegistered(context, '$error_message');
     }  
 
-    } catch(e) {
+    
 
+    } catch(e) {
       print('все норм');
-      // signInUser(pr, model);
+      await signInUser(model);
       // Navigator.of(context).push(MaterialPageRoute(
       // builder: (context) => ShrineApp()));
-      // print(e);
     }
 
   }
 
   signInUser(model) async {
+    setState(() {
+      _loading_message = 'Вход в аккаунт...';
+    });
+
+    // var pr = new ProgressDialog(context,ProgressDialogType.Normal);
+    // pr.setMessage('Вход...');
     // pr.show();
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // WooCommerceAPI wc_api = new WooCommerceAPI(
     //     "http://worlddelete.ru/risitesto",
@@ -307,8 +356,7 @@ checkConnectivity() async {
     // print(customersList.firstWhere((c) => c['email'] == email_field)['id']);
     // pr.hide();
     try {
-  // print(customersList.firstWhere((c) => c['email'] == email_field));
-
+      
     // if successful
       int id = customersList.firstWhere((c) => c['username'] == password_field)['id'];
       
@@ -323,9 +371,6 @@ checkConnectivity() async {
       print(id);
       print('пользователь залогинен');
 
-      Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => ShrineApp()));
-      
       } 
       else {
         print('не вышло');
@@ -334,15 +379,22 @@ checkConnectivity() async {
       }
 
   } catch(e) {
+    print(e);
     // _noSignIn(context);
-    print(e.message);
+    // print(e.message);
+    //  return await registerUser(model);
+
     if (e.message == 'No element') {
       print('нет в базе');
-      await registerUser(model);
+      // pr.setMessage('Cоздание аккаунта');
+      return await registerUser(model);
     }
   }
-
-    
+  
+   Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => ShrineApp()));
+      // pr.hide();
+// pr.hide();
 }
 
 

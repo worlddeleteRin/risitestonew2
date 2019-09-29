@@ -16,6 +16,7 @@ import 'package:Shrine/model/app_state_model.dart' as prefix0;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'app.dart';
@@ -61,21 +62,29 @@ Widget build(BuildContext context) {
         builder: (_, snapshot){
           if(snapshot.data == null){
             return Container(
+              decoration: new BoxDecoration(
+              image: new DecorationImage(
+                  image: new AssetImage("assets/collaboration.png"),
+                  fit: BoxFit.fill,
+              ),
+            ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Загрузка...'),
-                //     SpinKitDualRing(
-                //   color: Colors.black,
-                //   size: 50.0,
-                // ),
+                    SpinKitDualRing(
+                  color: Colors.black,
+                  size: 50.0,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 10),
+                    child: Text('Загрузка...'),
+                ),
                 ],)
               ),
             );
           }
-          print('lol6');
-          return App();
+          // return App();
         },
       ),
     );

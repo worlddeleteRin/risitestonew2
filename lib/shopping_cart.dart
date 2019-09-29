@@ -144,9 +144,43 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                         MaterialButton(
                           onPressed: () {
                             //showAlertDialog();
+                            if(model.totalCartQuantity == 0) {
+                              print('в коризне нет товара');
+                              return showDialog<void>(
+                              context: context,
+                              barrierDismissible: false, // user must tap button!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Корзина пуста'),
+                                  content: SingleChildScrollView(
+                                    child: ListBody(
+                                      children: <Widget>[
+                                        Text('Ваша корзина пуста.'),
+                                        Text('Добавьте товар, чтобы сделать заказ!'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      // color: Colors.orange,
+                                      child: Text('Продолжить',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                              );
+                            } else {
                             Navigator.push(context, 
                         MaterialPageRoute(builder: (context) => MyShopping(widget.allproducts)),
                         );
+                            }
                         //model.clearCart();
                         //ExpandingBottomSheet.of(context).close();
                           },

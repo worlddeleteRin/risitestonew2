@@ -57,6 +57,7 @@ class ShrineApp extends StatefulWidget {
 class _ShrineAppState extends State<ShrineApp>
     with SingleTickerProviderStateMixin {
 
+
   int _selectedIndex = 2;
 static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -134,7 +135,9 @@ void _onItemTapped(int index) {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return WillPopScope(
+    onWillPop: () async => false,
+    child: MaterialApp(
       darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       title: 'Рис & Тесто',
@@ -168,6 +171,7 @@ void _onItemTapped(int index) {
       onTap: _onItemTapped,
     ),
       ),
+    ),
     );
 
     
@@ -431,21 +435,21 @@ class _ProductMainPageState extends State<ProductMainPage> {
 
 @override
 Widget build(BuildContext context) {
+
     return DefaultTabController(
-      length: 6,
+      length: 8,
    child: Scaffold(
           drawer: MainDrawer(),
           appBar: AppBar(
             backgroundColor: Colors.black87,
             bottom: TabBar(
               indicatorColor: Colors.green,
-              indicatorWeight: 6,
+              indicatorWeight: 8,
               isScrollable: true,
               unselectedLabelColor: Colors.grey,
               labelColor: Colors.orange,
               labelPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               tabs: [
-               
                 Text(
                   "Пицца",
                 style: TextStyle(
@@ -464,6 +468,16 @@ Widget build(BuildContext context) {
                 ),
                 ),
                 Text("Бургеры",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                ),
+                Text("Наборы",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                ),
+                Text("Фритюр",
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -498,6 +512,8 @@ Widget build(BuildContext context) {
               ProductPage('rolls'),
               ProductPage('sets'),
               ProductPage('burgers'),
+              ProductPage('suits'),
+              ProductPage('df'),
               ProductPage('drinks'),
               ProductPage('supplements'),
             ],

@@ -69,20 +69,27 @@ class ProductCard extends StatelessWidget {
 
       MaterialButton(
         materialTapTargetSize: MaterialTapTargetSize.padded,
-        elevation: 10,
+        // elevation: 10,
         splashColor: Colors.green,
         shape: new RoundedRectangleBorder(
          borderRadius: new BorderRadius.circular(30.0)),
-        color: Colors.orange,
+        color: Colors.red,
         onPressed: () {
           //productsInCart.add(product[index]);
           //print(productsInCart);
           model.addProductToCart(this.product[index]['id']);
           Scaffold.of(context).showSnackBar(
             SnackBar(
+              backgroundColor: Colors.green,
               behavior: SnackBarBehavior.floating,
-              elevation: 1,
-              content: Text('${this.product[index]['name']} добавлен(а) в корзину'),
+              // elevation: 1,
+              content: Row(children: <Widget>[
+                Container(
+                margin: EdgeInsets.only(right: 15),
+                child: Icon(Icons.verified_user),
+                ),
+                Text('${this.product[index]['name']} добавлен(а) в корзину'),
+              ],),
               duration: Duration(seconds: 1),
             )
           );
@@ -148,6 +155,7 @@ class ProductCard extends StatelessWidget {
 
   
       return Scaffold(
+        backgroundColor: Colors.black12,
       body: ListView.builder(
             itemCount: product.length,
             itemBuilder: (BuildContext context,index){
@@ -255,7 +263,7 @@ class ProductCard extends StatelessWidget {
       return Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
             borderOnForeground: true,
-            elevation: 20,
+            // elevation: 20,
             semanticContainer: true,
             shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),

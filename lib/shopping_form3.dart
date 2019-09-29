@@ -257,7 +257,7 @@ bool isSwitched4 = false;
         // On hitting continue button, change the state
         onStepContinue: () {
           checkConnectivity();
-          setState(() {
+          setState(() async {
             // update the variable handling the current step value
             // going back one step i.e adding 1, until its the length of the step
             if (current_step!= null) {

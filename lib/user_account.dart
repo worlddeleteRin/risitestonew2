@@ -28,37 +28,29 @@ class _UserAccountState extends State<UserAccount> {
         //     ],
         //   )
         // );
-      return Scaffold(
-    body: DefaultTabController(
-      length: 3,
-      child: NestedScrollView(
-        headerSliverBuilder: (context, value) {
-          return [
-            SliverAppBar(
+        return DefaultTabController(
+          length: 2,
+      child: Scaffold(
+        appBar: AppBar(
               title: Text('Профиль'),
-              expandedHeight: 180,
               backgroundColor: Colors.black87,
               bottom: TabBar(
+                labelColor: Colors.red,
+                unselectedLabelColor: Colors.white,
+                indicatorWeight: 2,
                 tabs: [
-                  Tab(icon: Icon(Icons.supervised_user_circle), text: "Профиль"),
                   Tab(icon: Icon(Icons.message), text: "Заказы"),
                   Tab(icon: Icon(Icons.brightness_high), text: "Бонусы"),
                 ],
               ),
-              pinned: true,
-              floating: true,
             ),
-          ];
-        },
-        body: TabBarView(
+    body: TabBarView(
           children: [
-            Text('Информация о профиле'),
             OrdersPage(),
             BonusPage(),
           ],
         ),
       ),
-    ),
   );
       }
     );
@@ -93,7 +85,20 @@ Widget build(BuildContext context) {
 
       List orders = model.customer_orders;
       if (orders.isEmpty) {
-        return Column(
+        return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          onPressed: () async {
+            pr.show();
+            await model.updateCustomerOrders();
+            setState(() {
+              orders = model.customer_orders;
+            });
+            pr.hide();
+          },
+          child: Icon(Icons.refresh),
+        ),
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -124,7 +129,9 @@ Widget build(BuildContext context) {
           )
           ), 
           ),
-        ],);
+        ],
+        ),
+        );
       } else {
         return Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -208,6 +215,7 @@ Widget build(BuildContext context) {
         current_order: orders[index],
         number: orders[index]['number'],
         status: getStatus(),
+        status_color: _status_color,
         total: orders[index]['total'],
         first_name: orders[index]['billing']['first_name'],
         address_1: orders[index]['shipping']['address_1'],
@@ -274,6 +282,7 @@ class OrdersDetailPage extends StatefulWidget {
     this.current_order,
     this.number,
     this.status,
+    this.status_color,
     this.total,
     this.first_name,
     this.address_1,
@@ -288,6 +297,7 @@ class OrdersDetailPage extends StatefulWidget {
   var current_order;
   var number;
   String status;
+  var status_color;
   var total;
   String first_name;
   String address_1;
@@ -310,10 +320,26 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
           'Заказ № ${widget.number}',
         ),
       ),
-      body: Container(
+      body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+          Column(
+            children: <Widget>[
+            Text(
+              'Статус заказа: '
+            ),
+            Container(
+              child: Text(
+                '${widget.status}',
+                style: TextStyle(
+                  fontSize: 23,
+                  color: widget.status_color,
+                ),
+              ),
+            ),
+          ],),
           Column(
             children: <Widget>[
             Text(
@@ -321,7 +347,10 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
             ),
             Container(
               child: Text(
-                '${widget.first_name}'
+                '${widget.first_name}',
+                style: TextStyle(
+                  fontSize: 23,
+                ),
               ),
             ),
           ],),
@@ -331,7 +360,10 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
             ),
             Container(
               child: Text(
-                '${widget.address_1}'
+                '${widget.address_1}',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
             ),
           ],),
@@ -341,7 +373,10 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
             ),
             Container(
               child: Text(
-                '${widget.address_2}'
+                '${widget.address_2}',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
             ),
           ],),
@@ -351,7 +386,10 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
             ),
             Container(
               child: Text(
-                '${widget.payment_method_title}'
+                '${widget.payment_method_title}',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
             ),
           ],),
@@ -361,7 +399,10 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
             ),
             Container(
               child: Text(
-                '${widget.phone}'
+                '+${widget.phone}',
+                style: TextStyle(
+                  fontSize: 23,
+                ),
               ),
             ),
           ],)
@@ -492,7 +533,29 @@ class _BonusPageState extends State<BonusPage> {
           ),
         );
         } else {
-          return Column(
+          return Scaffold(
+            floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              pr.show();
+              await model.updateCustomers();
+              setState(() {
+                meta = model.customersList.firstWhere((c) => c['id'] == model.current_user_id)['meta_data'];
+                try {
+                if (!(meta.firstWhere((b) => b['key'] == 'hp_woo_rewards_points')['value'].isEmpty)) {
+                meta_bonus = meta.firstWhere((b) => b['key'] == 'hp_woo_rewards_points')['value'];
+                }
+                } catch(e) {
+
+                }
+                print(meta);
+                // meta_bonus = meta.firstWhere((b) => b['key'] == 'hp_woo_rewards_points')['value'];
+              });
+              pr.hide();
+            },
+            child: Icon(Icons.refresh),
+            backgroundColor: Colors.red,
+          ),
+          body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -523,7 +586,9 @@ class _BonusPageState extends State<BonusPage> {
           )
           ), 
           ),
-        ],);
+        ],
+          ),
+        );
         }
       } 
       );
@@ -552,7 +617,7 @@ class BonusDetailPage extends StatelessWidget {
       ),
       body: Container(
         child: Text(
-          'Информация о бонусах',
+          'Инструкция о бонусах',
         ) 
       )
     );
