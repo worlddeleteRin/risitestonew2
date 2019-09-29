@@ -46,6 +46,8 @@ flutter_icons:
 flutter:
   uses-material-design: true
   assets:
+    - assets/back1.jpg
+    - assets/collaboration.png
     - assets/diamond.png
     - assets/slanted_menu.png
     - assets/menu_background.jpg

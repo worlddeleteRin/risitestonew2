@@ -64,27 +64,51 @@ Widget build(BuildContext context) {
             return Container(
               decoration: new BoxDecoration(
               image: new DecorationImage(
-                  image: new AssetImage("assets/collaboration.png"),
-                  fit: BoxFit.fill,
+                  image: new AssetImage("assets/back1.jpg"),
+                  fit: BoxFit.cover,
               ),
             ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+              //        Container(
+              // decoration: new BoxDecoration(
+              // image: new DecorationImage(
+              //     image: new AssetImage("assets/logo_white2.png"),
+              //     fit: BoxFit.fill,
+              //     ),
+              //   ),
+              //       ),
+                    Card(
+                    color: Colors.white38,
+                    shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+                      // color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
                     SpinKitDualRing(
-                  color: Colors.black,
+                  color: Colors.red[800],
                   size: 50.0,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 10),
-                    child: Text('Загрузка...'),
+                    child: Text(
+                      'Загрузка...',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                      ),
                 ),
+                ],)
+                    ),
                 ],)
               ),
             );
           }
-          // return App();
+          return App();
         },
       ),
     );
