@@ -34,6 +34,10 @@ const _leftColumnWidth = 60.0;
 
 class ShoppingCartPage extends StatefulWidget {
 
+  ShoppingCartPage({this.mainDrawer});
+
+  Widget mainDrawer;
+
   List allproducts;
   @override
   _ShoppingCartPageState createState() => _ShoppingCartPageState();
@@ -91,6 +95,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
     final localTheme = Theme.of(context);
 
     return Scaffold(
+      drawer: widget.mainDrawer,
       appBar: AppBar(
         backgroundColor: Colors.black87,
         title: Text('Корзина'),
@@ -106,17 +111,10 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                 children: [
                   ListView(
                     children: [
-                      Row(
+                      Container(
+                        margin: EdgeInsets.only(top: 15, left: 30, bottom: 10),
+                      child: Row(
                         children: [
-                          SizedBox(
-                            width: _leftColumnWidth,
-                            child: IconButton(
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                onPressed: () {
-                                    //ExpandingBottomSheet.of(context).close()),
-                                }
-                          ),
-                          ),
                           Text(
                             'Ваши покупки',
                             style: localTheme.textTheme.subhead
@@ -125,6 +123,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                           const SizedBox(width: 16.0),
                           Text('Товаров: ${model.totalCartQuantity}'),
                         ],
+                      ),
                       ),
                       const SizedBox(height: 16.0),
                       Column(

@@ -105,7 +105,9 @@ final _formKey = GlobalKey<FormState>();
               softWrap: true,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 18,
+                fontFamily: 'GogoiaDec',
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
               ),
             ),
             ),
@@ -155,7 +157,7 @@ Widget LoginButton(model) {
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(26),
         ),
         onPressed: () async {
           if (_formKey.currentState.validate()) {
@@ -173,8 +175,13 @@ Widget LoginButton(model) {
           // Navigator.of(context).pushNamed(HomePage.tag);
         },
         padding: EdgeInsets.all(12),
-        color: Colors.lightBlueAccent,
-        child: Text('Войти', style: TextStyle(color: Colors.white)),
+        splashColor: Colors.red,
+        color: Colors.black87,
+        child: Text('Войти', style: TextStyle(color: Colors.white,
+        fontSize: 16,
+        letterSpacing: 6.0,
+        fontWeight: FontWeight.w500,
+        )),
       ),
     );
 }

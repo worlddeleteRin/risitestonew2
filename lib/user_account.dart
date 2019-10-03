@@ -6,8 +6,12 @@ import 'app.dart';
 import 'model/app_state_model.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
+
 class UserAccount extends StatefulWidget {
 
+  UserAccount({this.mainDrawer});
+
+  Widget mainDrawer;
 
   @override
   _UserAccountState createState() => new _UserAccountState();
@@ -31,6 +35,7 @@ class _UserAccountState extends State<UserAccount> {
         return DefaultTabController(
           length: 2,
       child: Scaffold(
+        drawer: widget.mainDrawer,
         appBar: AppBar(
               title: Text('Профиль'),
               backgroundColor: Colors.black87,
@@ -150,16 +155,16 @@ Widget build(BuildContext context) {
         decoration: BoxDecoration(
           gradient: LinearGradient(
           // Where the linear gradient begins and ends
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
           // Add one stop for each color. Stops should increase from 0 to 1
-          stops: [0.1, 0.6, 0.7, 0.9],
+          stops: [0.1, 0.4, 0.7, 0.9],
           colors: [
             // Colors are easy thanks to Flutter's Colors class.
-            Colors.indigo[300],
-            Colors.indigo[200],
-            Colors.lime[200],
-            Colors.lime[300],
+            Colors.black87,
+            Colors.black,
+            Colors.red[800],
+            Colors.red[700],
           ],
         ),
         ),
@@ -316,6 +321,7 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black87,
         title: Text(
           'Заказ № ${widget.number}',
         ),
@@ -614,12 +620,58 @@ class BonusDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Бонусы'),
+        backgroundColor: Colors.black87,
       ),
       body: Container(
-        child: Text(
-          'Инструкция о бонусах',
-        ) 
-      )
+        margin: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
+        child: ListView(
+          children: <Widget>[
+            Text(
+              'Наша система лояльности дает возможность получать бонусы с каждого заказа у нас, накапливать и обменивать бонусы для олпаты заказа в доставке Рис и Тесто, также наша компания может начислять дополнительные бонусы в качестве подарков и вознаграждения.',
+              softWrap: true, 
+            ),
+            Text(
+              'Как получить бонусы?',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+            Text(
+              '1. Делай заказ у нас, и получай от 5 до 15% на бонусный счет с каждого заказа.'
+            ),
+            Text(
+              '2. Участвуй в наших розыгрышах в ВК и Инстаграм и получай дополнительные бонусы в качестве вознаграждения.',
+            ),
+            Text(
+              'Как можно обменять бонусы?',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+             Text(
+               'Накопите достаточное количество бонусов (минимально 500 бонусов), и оплатите заказ бонусами.',
+             ),
+             Container(
+              margin: EdgeInsets.only(top: 10),
+            ),
+             Text(
+              '1 бонус = 1 рублю.',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+            ),
+            Text(
+              'Проверить количество бонусов вы можете у нас в приложении и у оператора.'
+            ),
+          ],
+        ), 
+      ),
     );
   }
 }

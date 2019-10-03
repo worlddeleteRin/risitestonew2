@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:io';
+
 import 'package:Shrine/model/app_state_model.dart' as prefix0;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,34 @@ AppStateModel model = AppStateModel();
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+AppStateModel model;  
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  bool _internet_result = false;
+
+checkConnectivity() async {
+  try {
+  final result = await InternetAddress.lookup('google.com');
+  if (result[0].rawAddress.isNotEmpty) {
+    setState(() => this._internet_result = true);
+  }
+} on SocketException catch (_) {
+  return false;
+}
+}
+
+@override 
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkConnectivity();
+  }
 
  
 @override
@@ -56,6 +85,46 @@ Widget build(BuildContext context) {
     color: Colors.blue,
     home: ScopedModelDescendant<AppStateModel>(
             builder: (context, child, model) {
+
+    if (_internet_result == false) {
+      return AlertDialog(
+        backgroundColor: Colors.red,
+        shape: new RoundedRectangleBorder(
+         borderRadius: new BorderRadius.circular(30.0)),
+        title: Text('Нет соединения с интернетом!',
+        style: TextStyle(
+          color: Colors.white,
+        )
+        ),
+        content: Icon(
+          Icons.signal_wifi_off,
+          size: 80,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            height: 50,
+            minWidth: 120,
+            color: Colors.orange,
+            shape: new RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(30.0)),
+            child: Text(
+              'Повторить',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+              ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => MyApp()
+              ));
+            },
+          ),
+        ],
+      );
+    } else {
+    
     return Scaffold(
     body: FutureBuilder(
         future: model.getProductswc(),
@@ -112,6 +181,8 @@ Widget build(BuildContext context) {
         },
       ),
     );
+
+    }
             },
     ),
 

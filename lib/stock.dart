@@ -14,6 +14,10 @@ import 'dart:math' as math;
 
 class StockPage extends StatefulWidget {
 
+  StockPage({this.mainDrawer});
+
+  Widget mainDrawer;
+
   _StockPageState createState() => _StockPageState();
 }
 
@@ -32,6 +36,7 @@ class _StockPageState extends State<StockPage> {
     return ScopedModelDescendant<AppStateModel>(
             builder: (context, child, model)  {
     return Scaffold(
+      drawer: widget.mainDrawer,
       appBar: AppBar(
         backgroundColor: Colors.black87,
         title: Text('Акции'),
@@ -380,12 +385,13 @@ Widget build(BuildContext context) {
 }
 
 _launchURL() async {
-  const url = 'tel:+1 555 010 999';
-  // if (await canLaunch(url)) {
-  //   await launch(url);
-  // } else {
-  //   throw 'Ошибка при наборе $url';
-  // }
+  const url = 'tel:+79780250253';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    print('Ошибка при наборе' + url);
+    // throw 'Ошибка при наборе $url';
+  }
   await launch(url);
 }
 

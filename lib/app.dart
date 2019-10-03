@@ -13,7 +13,9 @@
 // limitations under the License.
 
 import 'package:Shrine/shopping_cart.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'backdrop.dart';
 import 'colors.dart';
@@ -58,7 +60,7 @@ class _ShrineAppState extends State<ShrineApp>
     with SingleTickerProviderStateMixin {
 
 
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
 static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
 
@@ -99,13 +101,13 @@ static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWei
   widgetOptions(int page) {
     switch (page) {
       case 0:
-      return UserAccount();
+      return UserAccount(mainDrawer: MainDrawer());
       case 1: 
-      return StockPage();
-      case 2: 
       return ProductMainPage();
+      case 2: 
+      return StockPage(mainDrawer: MainDrawer());
       case 3:  
-      return ShoppingCartPage(); 
+      return ShoppingCartPage(mainDrawer: MainDrawer()); 
     }
   }
 
@@ -151,12 +153,12 @@ void _onItemTapped(int index) {
           title: Text('Профиль'),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_offer),
-          title: Text('Акции'),
-        ),
-        BottomNavigationBarItem(
           icon: Icon(Icons.fastfood),
           title: Text('Товары'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.local_offer),
+          title: Text('Акции'),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_cart),
@@ -222,7 +224,7 @@ Widget MainDrawer()  {
                     size: 100,
                     ),
                     Text(
-                      model.current_user_username == null ? 'Гость' : '${model.current_user_username}',
+                      model.current_user_username == null ? 'Гость' : '+${model.current_user_username}',
                       style: TextStyle(
                         fontSize: 16,
                       )
@@ -294,6 +296,23 @@ Widget MainDrawer()  {
                 Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => StockPage()));
                 //Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Сайт',
+                ),
+                leading: Icon(Icons.public, color: Colors.black),
+                trailing: Icon(Icons.keyboard_arrow_right, color: Colors.red),
+              onTap: () async {
+                //Navigator.pop(context);
+              const url = 'http://risitesto.net/';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'Could not launch $url';
+              }
+                            //Navigator.pop(context);
               },
             ),
             ListTile(
@@ -440,6 +459,7 @@ Widget build(BuildContext context) {
       length: 8,
    child: Scaffold(
           drawer: MainDrawer(),
+          drawerDragStartBehavior: DragStartBehavior.start,
           appBar: AppBar(
             backgroundColor: Colors.black87,
             bottom: TabBar(
